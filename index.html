@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Olive Tree Pruning Simulator - محاكي تقليم أشجار الزيتون</title>
+    <style>
+        :root {
+            --primary: #4CAF50;
+            --primary-dark: #388E3C;
+            --accent: #FFC107;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #0f140d;
+            color: #fff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+            user-select: none;
+        }
+
+        #game-container {
+            position: relative;
+            width: 960px;
+            height: 540px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.7);
+            border-radius: 12px;
+            overflow: hidden;
+            border: 4px solid #2e3d24;
+        }
+
+        /* حقل واقعي - خلفية ممتدة */
+        #game-stage {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.4)), 
+                        url('https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?q=80&w=1200&auto=format&fit=crop') no-repeat center center;
+            background-size: cover;
+            position: relative;
+            cursor: none; /* إخفاء الماوس ليحل محله المقص */
+        }
+
+        .screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 23, 15, 0.95);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 30px;
+            box-sizing: border-box;
+            z-index: 10;
+            text-align: center;
+            backdrop-filter: blur(5px);
+        }
+
+        .lang-split {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            width: 100%;
+            max-width: 900px;
+            margin-bottom: 20px;
+        }
+
+        .lang-column {
+            background: rgba(255,255,255,0.05);
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid rgba(255,255,255,0.1);
+            max-height: 320px;
+            overflow-y: auto;
+        }
+
+        .en { text-align: left; direction: ltr; }
+        .ar { text-align: right; direction: rtl; }
+
+        h1 { color: var(--primary); margin: 0 0 10px 0; font-size: 2rem; }
+        h3 { color: var(--accent); margin-top: 0; border-bottom: 2px solid var(--primary); padding-bottom: 5px; }
+        
+        ol, ul { padding-inline-start: 20px; margin: 10px 0; }
+        li { margin: 6px 0; font-size: 0.9rem; }
+
+        button {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            border: none;
+            padding: 12px 40px;
+            font-size: 1.3rem;
+            font-weight: bold;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.4);
+        }
+
+        button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 7px 20px rgba(76, 175, 80, 0.6);
+        }
+
+        /* واجهة اللعبة العلوية */
+        #ui-layer {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            right: 15px;
+            display: flex;
+            justify-content: space-between;
+            pointer-events: none;
+            z-index: 5;
+        }
+
+        .ui-box {
+            background: rgba(0, 0, 0, 0.75);
+            padding: 8px 20px;
+            border-radius: 30px;
+            font-weight: bold;
+            font-size: 1.1rem;
+            border: 1px solid rgba(255,255,255,0.2);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        #timer { color: #ff5252; border-color: #ff5252; }
+        #variety-badge { color: var(--accent); }
+        #score { color: #69f0ae; }
+
+        /* مقص حقيقي مخصص متحرك */
+        #shears-cursor {
+            position: absolute;
+            width: 90px;
+            height: 90px;
+            pointer-events: none;
+            z-index: 100;
+            transform: translate(-30px, -30px); /* موازنة نقطة القص */
+            transition: transform 0.05s ease-out;
+        }
+
+        .blade {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: url('https://i.ibb.co/vYg6fX6/shears-blade.png') no-repeat center center;
+            background-size: contain;
+            /* في حال لم تفتح الصورة، نضع شكل احتياطي مميز بالـ CSS للمقص المعدني الحقيقي */
+            filter: drop-shadow(2px 4px 5px rgba(0,0,0,0.5));
+        }
+
+        /* العناصر التفاعلية في الحقل (الأشجار والأغصان) */
+        .tree-container {
+            position: absolute;
+            bottom: 0;
+            width: 400px;
+            height: 450px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .tree-trunk {
+            position: absolute;
+            bottom: 0;
+            width: 35px;
+            height: 180px;
+            background: #4a3319;
+            border-radius: 10px 10px 0 0;
+            box-shadow: inset -5px 0 10px rgba(0,0,0,0.5);
+        }
+
+        .branch {
+            position: absolute;
+            background-color: #5c4033;
+            border-radius: 5px;
+            cursor: none;
+            transform-origin: bottom center;
+            transition: opacity 0.2s ease-out;
+        }
+
+        .branch.new-growth {
+            background-color: #7cb342;
+            box-shadow: 0 0 8px rgba(124, 179, 66, 0.6);
+        }
+
+        .branch:hover {
+            filter: brightness(1.3) saturate(1.2);
+        }
+
+        /* تأثير النقاط الطائرة */
+        .floating-score {
+            position: absolute;
+            font-weight: bold;
+            font-size: 1.5rem;
+            pointer-events: none;
+            animation: floatUp 0.8s forwards ease-out;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(0); opacity: 1; }
+            100% { transform: translateY(-50px); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+
+<div id="game-container">
+    
+    <!-- شاشة البداية باللغتين -->
+    <div id="start-screen" class="screen">
+        <h1>Olive Tree Pruning Simulator</h1>
+        <h1 style="font-size: 1.8rem; margin-bottom: 20px;">محاكي تقليم أشجار الزيتون</h1>
+        
+        <div class="lang-split">
+            <!-- English Instructions -->
+            <div class="lang-column en">
+                <h3>📜 Game Rules (50s)</h3>
+                <strong>Tree Varieties (Best to Worst):</strong>
+                <ol>
+                    <li>K18 (Highest)</li>
+                    <li>Arbequina | 3. Manzanilla</li>
+                    <li>Kalamata | 5. Jlot</li>
+                    <li>Qaisi | 7. Nabali</li>
+                    <li>Istanbuli (Lowest)</li>
+                </ol>
+                <strong>Quality Multipliers:</strong>
+                <ul>
+                    <li>🌱 Light Green branches = New growth (More points!)</li>
+                    <li>🔝 Higher branches give better scores.</li>
+                    <li>📐 Side-angled branches are better than vertical ones.</li>
+                </ul>
+            </div>
+
+            <!-- الإرشادات باللغة العربية -->
+            <div class="lang-column ar">
+                <h3>📜 قوانين اللعبة (50 ثانية)</h3>
+                <strong>أنواع الزيتون (من الأعلى للأقل قيمة):</strong>
+                <ol>
+                    <li>K18 (الأعلى قيمة)</li>
+                    <li>أربيكينا | 3. مانزانيلا</li>
+                    <li>كالاماتا | 5. جلوط</li>
+                    <li>قيسي | 7. نبالي</li>
+                    <li>إسطنبولي (الأقل قيمة)</li>
+                </ol>
+                <strong>مضاعفات الجودة:</strong>
+                <ul>
+                    <li>🌱 الأغصان الخضراء الفاتحة = نمو جديد (نقاط أعلى!)</li>
+                    <li>🔝 الأغصان في قمة الشجرة تعطي سكور أفضل.</li>
+                    <li>📐 الأغصان المائلة جانبياً أفضل من العمودية المستقيمة.</li>
+                </ul>
+            </div>
+        </div>
+        
+        <button onclick="startGame()">Start Pruning / ابدأ التقليم</button>
+    </div>
+
+    <!-- شاشة نهاية اللعبة -->
+    <div id="game-over-screen" class="screen" style="display: none;">
+        <h1 style="color: var(--accent);">Time's Up! / انتهى الوقت!</h1>
+        <h2 style="font-size: 2rem;">Score / النتيجة: <span id="final-score" style="color: #69f0ae;">0</span></h2>
+        <p>You did a great job taking care of the orchard! | لقد قمت بعمل رائع في العناية بالحقل!</p>
+        <button onclick="restartGame()">Play Again / العب مجدداً</button>
+    </div>
+
+    <!-- واجهة اللعبة النشطة -->
+    <div id="game-stage">
+        <div id="ui-layer">
+            <div id="timer" class="ui-box">⏱️ 50s</div>
+            <div id="variety-badge" class="ui-box">🌳 K18</div>
+            <div id="score" class="ui-box">Score: 0 / النقاط: 0</div>
+        </div>
+
+        <!-- حقل الأشجار المتعددة -->
+        <div id="orchard"></div>
+
+        <!-- مقص التقليم الواقعي -->
+        <div id="shears-cursor">
+            <!-- تصميم مقص واقعي مدمج عبر الـ CSS لضمان عمله فوراً وشكله الاحترافي -->
+            <div class="blade" id="blade-left" style="transform: rotate(-15deg); width: 100%; height: 100%; background: url('data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 100\'><path d=\'M50,50 L20,10 C30,10 45,30 50,50 Z\' fill=\'%23b0bec5\' stroke=\'%2337474f\'/><circle cx=\'50\' cy=\'50\' r=\'4\' fill=\'%2337474f\'/><path d=\'M50,50 L80,90\' stroke=\'%23d32f2f\' stroke-width=\'8\' stroke-linecap=\'round\'/></svg>');"></div>
+            <div class="blade" id="blade-right" style="transform: rotate(15deg); width: 100%; height: 100%; background: url('data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 100\'><path d=\'M50,50 L15,25 C28,30 40,45 50,50 Z\' fill=\'%23cfd8dc\' stroke=\'%2337474f\'/><path d=\'M50,50 L70,95\' stroke=\'%23d32f2f\' stroke-width=\'8\' stroke-linecap=\'round\'/></svg>');"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const stage = document.getElementById('game-stage');
+    const shears = document.getElementById('shears-cursor');
+    const bladeLeft = document.getElementById('blade-left');
+    const bladeRight = document.getElementById('blade-right');
+    const orchard = document.getElementById('orchard');
+    
+    let score = 0;
+    let timeLeft = 50;
+    let gameActive = false;
+    let countdownTimer;
+
+    // الأصناف الثمانية بالترتيب مع قيمها والترجمة
+    const varieties = [
+        { en: "K18 (Highest)", ar: "K18 (الأعلى)", value: 120 },
+        { en: "Arbequina", ar: "أربيكينا", value: 100 },
+        { en: "Manzanilla", ar: "مانزانيلا", value: 85 },
+        { en: "Kalamata", ar: "كالاماتا", value: 70 },
+        { en: "Jlot", ar: "جلوط", value: 55 },
+        { en: "Qaisi", ar: "قيسي", value: 45 },
+        { en: "Nabali", ar: "نبالي", value: 35 },
+        { en: "Istanbuli (Lowest)", ar: "إسطنبولي (الأقل)", value: 20 }
+    ];
+    let currentVariety = varieties[0];
+
+    // الصوت الواقعي للمقص باستخدام كود داخلي نقي (صوت قص معدني مرضٍ)
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    function playCutSound() {
+        if (!audioCtx) return;
+        let osc = audioCtx.createOscillator();
+        let gain = audioCtx.createGain();
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(150, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(500, audioCtx.currentTime + 0.06);
+        gain.gain.setValueAtTime(0.4, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.06);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.06);
+    }
+
+    // تتبع حركة الماوس داخل الحقل لتحريك المقص الواقعي
+    stage.addEventListener('mousemove', (e) => {
+        const rect = stage.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        shears.style.left = `${x}px`;
+        shears.style.top = `${y}px`;
+    });
+
+    // حركة حركة إغلاق المقص عند الضغط (القص)
+    stage.addEventListener('mousedown', () => {
+        if (!gameActive) return;
+        bladeLeft.style.transform = "rotate(-2deg)";
+        bladeRight.style.transform = "rotate(2deg)";
+        playCutSound();
+    });
+
+    stage.addEventListener('mouseup', () => {
+        bladeLeft.style.transform = "rotate(-15deg)";
+        bladeRight.style.transform = "rotate(15deg)";
+    });
+
+    function startGame() {
+        document.getElementById('start-screen').style.display = 'none';
+        gameActive = true;
+        score = 0;
+        timeLeft = 50;
+        updateUI();
+        spawnNewOrchard();
+
+        countdownTimer = setInterval(() => {
+            timeLeft--;
+            updateUI();
+
+            // كل 8 ثوانٍ تتغير الأشجار في الحقل لنوع جديد تلقائياً
+            if (timeLeft % 8 === 0 && timeLeft > 0) {
+                let nextIndex = (varieties.indexOf(currentVariety) + 1) % varieties.length;
+                currentVariety = varieties[nextIndex];
+                spawnNewOrchard();
+            }
+
+            if (timeLeft <= 0) {
+                endGame();
+            }
+        }, 1000);
+    }
+
+    function updateUI() {
+        document.getElementById('timer').innerText = `⏱️ ${timeLeft}s`;
+        document.getElementById('score').innerText = `Score: ${score} / النقاط: ${score}`;
+        document.getElementById('variety-badge').innerText = `🌳 ${currentVariety.en} | ${currentVariety.ar}`;
+    }
+
+    // توليد حقل يحتوي على عدة أشجار لزيادة الواقعية
+    function spawnNewOrchard() {
+        orchard.innerHTML = ''; // تنظيف الحقل السابق
+        
+        // توليد 3 أشجار في مواقع مختلفة في الخلفية
+        const treePositions = [100, 380, 660]; 
+        
+        treePositions.forEach((xPos) => {
+            const treeContainer = document.createElement('div');
+            treeContainer.className = 'tree-container';
+            treeContainer.style.left = `${xPos}px`;
+            
+            const trunk = document.createElement('div');
+            trunk.className = 'tree-trunk';
+            treeContainer.appendChild(trunk);
+
+            // توليد الأغصان لكل شجرة بشكل عشوائي وجميل
+            for (let i = 0; i < 12; i++) {
+                const branch = document.createElement('div');
+                
+                // تحديد عشوائي: هل الغصن نمو جديد (أخضر) أم خشب قديم (بني)؟
+                const isNew = Math.random() > 0.4;
+                branch.className = `branch ${isNew ? 'new-growth' : ''}`;
+                
+                // أبعاد ومواقع الغصن لجعل الشجرة تبدو طبيعية وواقعية
+                const bWidth = isNew ? 6 : 10;
+                const bLength = 60 + Math.random() * 70;
+                const bBottom = 150 + Math.random() * 200;
+                const bLeft = 150 + (Math.random() * 100 - 50);
+                const angle = Math.random() * 140 - 70; // زوايا مائلة ومتنوعة
+
+                branch.style.width = `${bWidth}px`;
+                branch.style.height = `${bLength}px`;
+                branch.style.bottom = `${bBottom}px`;
+                branch.style.left = `${bLeft}px`;
+                branch.style.transform = `rotate(${angle}deg)`;
+
+                // حفظ الداتا والخصائص داخل الغصن لحساب النقاط بدقة عند القص
+                branch.dataset.isNew = isNew;
+                branch.dataset.height = bBottom; // كلما زاد الارتفاع زادت القيمة
+                branch.dataset.angle = Math.abs(angle); // لحساب بونص الزاوية المائلة
+
+                // حدث التقليم عند مرور المقص والضغط
+                branch.addEventListener('mouseover', (e) => {
+                    // إذا كان اللاعب يضغط الماوس أثناء المرور فوق الغصن يتم قصه فوراً
+                    if (e.buttons === 1 && gameActive) {
+                        pruneBranch(branch, e.clientX, e.clientY);
+                    }
+                });
+                
+                branch.addEventListener('mousedown', (e) => {
+                    if (gameActive) pruneBranch(branch, e.clientX, e.clientY);
+                });
+
+                treeContainer.appendChild(branch);
+            }
+            
+            orchard.appendChild(treeContainer);
+        });
+    }
+
+    function pruneBranch(branch, clientX, clientY) {
+        if (branch.style.opacity === '0') return; // مقصوص مسبقاً
+        
+        branch.style.opacity = '0';
+        branch.style.pointerEvents = 'none';
+
+        // تطبيق القوانين وحساب السكور بدقة:
+        const base = currentVariety.value;
+        const isNew = branch.dataset.isNew === 'true';
+        const height = parseFloat(branch.dataset.height);
+        const angle = parseFloat(branch.dataset.angle);
+
+        // 1. مضاعف النمو الجديد
+        const growthMult = isNew ? 1.6 : 1.0;
+        // 2. مضاعف الارتفاع (الأعلى أفضل)
+        const heightMult = 1 + (height / 350); 
+        // 3. مضاعف الزاوية المائلة (المائل أفضل من العامودي المستقيم)
+        const angleMult = angle > 30 ? 1.4 : 1.0;
+
+        const points = Math.round(base * growthMult * heightMult * angleMult);
+        score += points;
+        updateUI();
+
+        // إظهار النقاط تطير بشكل جمالي في مكان القص
+        const rect = stage.getBoundingClientRect();
+        showFloatingScore(clientX - rect.left, clientY - rect.top, `+${points}`, isNew ? '#8bc34a' : '#ffc107');
+    }
+
+    function showFloatingScore(x, y, text, color) {
+        const scorePop = document.createElement('div');
+        scorePop.className = 'floating-score';
+        scorePop.innerText = text;
+        scorePop.style.left = `${x}px`;
+        scorePop.style.top = `${y}px`;
+        scorePop.style.color = color;
+        stage.appendChild(scorePop);
+        
+        setTimeout(() => scorePop.remove(), 800);
+    }
+
+    function endGame() {
+        gameActive = false;
+        clearInterval(countdownTimer);
+        document.getElementById('game-over-screen').style.display = 'flex';
+        document.getElementById('final-score').innerText = score;
+    }
+
+    function restartGame() {
+        document.getElementById('game-over-screen').style.display = 'none';
+        currentVariety = varieties[0];
+        startGame();
+    }
+</script>
+
+</body>
+</html>

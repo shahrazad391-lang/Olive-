@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Olive Tree Pruning Simulator</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #1a1a1a;
+            color: #fff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+            user-select: none;
+        }
+
+        #game-container {
+            position: relative;
+            width: 800px;
+            height: 600px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        canvas {
+            background: linear-gradient(to bottom, #87CEEB, #E0F6FF);
+            cursor: none; /* Hide default cursor to show shears */
+        }
+
+        .screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(20, 30, 20, 0.95);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+            box-sizing: border-box;
+            z-index: 10;
+            text-align: center;
+        }
+
+        h1 { color: #4CAF50; margin-top: 0; font-size: 2.5rem; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); }
+        h2 { color: #8BC34A; }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+            text-align: left;
+            width: 100%;
+            max-width: 700px;
+        }
+
+        .info-box {
+            background: rgba(250,250,250,0.1);
+            padding: 15px;
+            border-radius: 6px;
+            border-left: 4px solid #4CAF50;
+        }
+
+        ol { margin: 5px 0; padding-left: 20px; }
+        li { margin: 4px 0; }
+        ul { padding-left: 20px; }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 4px 15px rgba(76, 175, 80, 0.4);
+            margin-top: 15px;
+        }
+
+        button:hover {
+            background-color: #45a049;
+            transform: scale(1.05);
+        }
+
+        #ui-layer {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            right: 10px;
+            display: flex;
+            justify-content: space-between;
+            pointer-events: none;
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-shadow: 2px 2px 2px rgba(0,0,0,0.7);
+            z-index: 5;
+        }
+
+        .ui-element {
+            background: rgba(0,0,0,0.5);
+            padding: 5px 15px;
+            border-radius: 20px;
+        }
+        
+        #timer { color: #ff4444; }
+        #score { color: #4CAF50; }
+        #variety-badge { color: #FFC107; }
+    </style>
+</head>
+<body>
+
+<div id="game-container">
+    <!-- UI Overlay -->
+    <div id="ui-layer">
+        <div id="timer" class="ui-element">Time: 3:00</div>
+        <div id="variety-badge" class="ui-element">Tree: Loading...</div>
+        <div id="score" class="ui-element">Score: 0</div>
+    </div>
+
+    <!-- Info / Start Screen -->
+    <div id="start-screen" class="screen">
+        <h1>Olive Tree Pruning Simulator</h1>
+        <p>You have exactly 3 minutes to prune branches strategically!</p>
+        
+        <div class="info-grid">
+            <div class="info-box">
+                <h3>Tree Varieties (Best to Worst)</h3>
+                <ol>
+                    <li><strong>K18</strong> (Highest Value)</li>
+                    <li>Arbequina</li>
+                    <li>Manzanilla</li>
+                    <li>Kalamata</li>
+                    <li>Jlot</li>
+                    <li>Qaisi</li>
+                    <li>Nabali</li>
+                    <li>Istanbuli (Lowest Value)</li>
+                </ol>
+            </div>
+            <div class="info-box">
+                <h3>Quality Multipliers</h3>
+                <ul>
+                    <li><span style="color: #8BC34A;">🌱 New Growth (Light Green):</span> Higher Value</li>
+                    <li><span style="color: #795548;">🪵 Old Wood (Brown):</span> Standard Value</li>
+                    <li><span style="color: #FFC107;">🔝 Top Branches:</span> Better than bottom ones</li>
+                    <li><span style="color: #00BCD4;">📐 Side-Angled:</span> Better than vertical ones</li>
+                </ul>
+            </div>
+        </div>
+        <button onclick="startGame()">Start Pruning</button>
+    </div>
+
+    <!-- Game Over Screen -->
+    <div id="game-over-screen" class="screen" style="display: none;">
+        <h1>Time's Up!</h1>
+        <h2>Your Final Score: <span id="final-score" style="color: #FFC107;">0</span></h2>
+        <p>Excellent job tending to the olive orchard.</p>
+        <button onclick="restartGame()">Play Again</button>
+    </div>
+
+    <canvas id="gameCanvas" width="800" height="600"></canvas>
+</div>
+
+<script>
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+    
+    // Game State
+    let score = 0;
+    let timeLeft = 180;
+    let gameActive = false;
+    let gameTimer = null;
+    let branches = [];
+    let currentVarietyIndex = 0;
+    let scoreFeedbacks = [];
+    
+    // Mouse/Hand position
+    let mouseX = 400;
+    let mouseY = 300;
+    let isCutting = false;
+
+    // Audio Synthesis (Web Audio API for pure satisfying sound effects without external files)
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    
+    function playCutSound() {
+        if (!audioCtx) return;
+        // Snip sound
+        let osc = audioCtx.createOscillator();
+        let gain = audioCtx.createGain();
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(120, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(400, audioCtx.currentTime + 0.08);
+        
+        gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.08);
+        
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.08);
+    }
+
+    // Varieties Data
+    const varieties = [
+        { name: "K18", baseValue: 100, color: "#2E5A1c" },
+        { name: "Arbequina", baseValue: 85, color: "#3B6E26" },
+        { name: "Manzanilla", baseValue: 75, color: "#488231" },
+        { name: "Kalamata", baseValue: 65, color: "#55963B" },
+        { name: "Jlot", baseValue: 55, color: "#62AA46" },
+        { name: "Qaisi", baseValue: 45, color: "#6FBE50" },
+        { name: "Nabali", baseValue: 35, color: "#7CD25B" },
+        { name: "Istanbuli", baseValue: 20, color: "#89E666" }
+    ];
+
+    // Event Listeners
+    canvas.addEventListener('mousemove', (e) => {
+        const rect = canvas.getBoundingClientRect();
+        mouseX = e.clientX - rect.left;
+        mouseY = e.clientY - rect.top;
+    });
+
+    canvas.addEventListener('mousedown', () => {
+        if (!gameActive) return;
+        isCutting = true;
+        playCutSound();
+        checkPrune();
+    });
+
+    canvas.addEventListener('mouseup', () => {
+        isCutting = false;
+    });
+
+    function startGame() {
+        document.getElementById('start-screen').style.display = 'none';
+        gameActive = true;
+        score = 0;
+        timeLeft = 180;
+        branches = [];
+        scoreFeedbacks = [];
+        currentVarietyIndex = 0;
+        
+        generateTree();
+        
+        // Timer Interval
+        gameTimer = setInterval(() => {
+            timeLeft--;
+            const mins = Math.floor(timeLeft / 60);
+            const secs = timeLeft % 60;
+            document.getElementById('timer').innerText = `Time: ${mins}:${secs.toString().padStart(2,'0')}`;
+            
+            // Randomly change tree variety every few seconds to keep it interesting
+            if (timeLeft % 7 === 0 && timeLeft > 0) {
+                currentVarietyIndex = (currentVarietyIndex + 1) % varieties.length;
+                generateTree();
+            }
+            
+            if (timeLeft <= 0) {
+                endGame();
+            }
+        }, 1000);
+        
+        // Start Loop
+        requestAnimationFrame(gameLoop);
+    }
+
+    function restartGame() {
+        document.getElementById('game-over-screen').style.display = 'none';
+        startGame();
+    }
+
+    function endGame() {
+        gameActive = false;
+        clearInterval(gameTimer);
+        document.getElementById('game-over-screen').style.display = 'flex';
+        document.getElementById('final-score').innerText = score;
+    }
+
+    function generateTree() {
+        branches = [];
+        document.getElementById('variety-badge').innerText = `Tree: ${varieties[currentVarietyIndex].name}`;
+        
+        // Main Trunk Base
+        let startX = 400;
+        let startY = 600;
+        
+        // Generate recursive branch structure
+        function createBranch(x, y, angle, length, depth, isNewGrowth) {
+            if (depth > 5) return;
+
+            // Calculate End Points
+            let endX = x + Math.cos(angle) * length;
+            let endY = y + Math.sin(angle) * length;
+
+            // Determine Properties for rules
+            // 1. Top of tree bonus (lower Y means higher up on screen)
+            let heightFactor = (600 - endY) / 600; 
+            
+            // 2. Side-angle bonus (Horizontal is closer to 0 or PI. Vertical is PI/2 or -PI/2)
+            let isVertical = Math.abs(Math.sin(angle)) > 0.8;
+            let angleFactor = isVertical ? 1.0 : 1.5;
+
+            // 3. New growth vs old wood
+            let growthType = isNewGrowth || (depth >= 3) ? 'new' : 'old';
+
+            branches.push({
+                startX: x,
+                startY: y,
+                endX: endX,
+                endY: endY,
+                depth: depth,
+                growthType: growthType,
+                angleFactor: angleFactor,
+                heightFactor: heightFactor,
+                pruned: false
+            });
+
+            // Spawn sub-branches
+            let numBranches = 2 + Math.floor(Math.random() * 2);
+            for(let i=0; i<numBranches; i++) {
+                let nextAngle = angle + (Math.random() * 0.8 - 0.4);
+                let nextLength = length * (0.7 + Math.random() * 0.2);
+                createBranch(endX, endY, nextAngle, nextLength, depth + 1, growthType === 'new');
+            }
+        }
+
+        // Start tree generation (growing upwards, hence -PI/2)
+        createBranch(startX, startY - 50, -Math.PI/2, 100, 1, false);
+    }
+
+    function checkPrune() {
+        branches.forEach(branch => {
+            if (branch.pruned) return;
+
+            // Distance from cursor to branch mid-point
+            let midX = (branch.startX + branch.endX) / 2;
+            let midY = (branch.startY + branch.endY) / 2;
+            let dist = Math.hypot(mouseX - midX, mouseY - midY);
+
+            // If close enough to the middle of the branch, clip it!
+            if (dist < 25) {
+                branch.pruned = true;
+                
+                // Calculate Score based on requested rules
+                let currentVariety = varieties[currentVarietyIndex];
+                let base = currentVariety.baseValue;
+                
+                let growthMultiplier = (branch.growthType === 'new') ? 1.5 : 1.0;
+                let heightMultiplier = 1 + branch.heightFactor; // Up to 2x for top
+                let angleMultiplier = branch.angleFactor; // 1.5x for side angles
+
+                let finalPoints = Math.round(base * growthMultiplier * heightMultiplier * angleMultiplier);
+                score += finalPoints;
+                
+                // Update UI text
+                document.getElementById('score').innerText = `Score: ${score}`;
+
+                // Floating score feedback
+                scoreFeedbacks.push({
+                    x: midX,
+                    y: midY,
+                    text: `+${finalPoints}`,
+                    alpha: 1.0,
+                    color: branch.growthType === 'new' ? '#8BC34A' : '#FFC107'
+                });
+            }
+        });
+    }
+
+    function drawHandAndShears() {
+        ctx.save();
+        ctx.translate(mouseX, mouseY);
+        
+        // Animate shear snapping
+        let shearAngle = isCutting ? 0.1 : 0.4;
+
+        // Draw Hand/Glove
+        ctx.fillStyle = "#bf8f63"; // Hand color
+        ctx.beginPath();
+        ctx.arc(40, 50, 20, 0, Math.PI*2);
+        ctx.fill();
+
+        // Sleeve
+        ctx.fillStyle = "#5d4037";
+        ctx.fillRect(30, 50, 30, 80);
+
+        // Shears Blade 1
+        ctx.save();
+        ctx.rotate(-shearAngle);
+        ctx.strokeStyle = "#757575";
+        ctx.lineWidth = 6;
+        ctx.lineCap = "round";
+        ctx.beginPath();
+        ctx.moveTo(0, 0);
+        ctx.lineTo(-30, -15);
+        ctx.stroke();
+        // Handles
+        ctx.strokeStyle = "#d32f2f";
+        ctx.lineWidth = 8;
+        ctx.beginPath();
+        ctx.moveTo(0, 0);
+        ctx.lineTo(30, 20);
+        ctx.stroke();
+        ctx.restore();
+
+        // Shears Blade 2
+        ctx.save();
+        ctx.rotate(shearAngle);
+        ctx.strokeStyle = "#9e9e9e";
+        ctx.lineWidth = 6;
+        ctx.lineCap = "round";
+        ctx.beginPath();
+        ctx.moveTo(0, 0);
+        ctx.lineTo(-35, -5);
+        ctx.stroke();
+        // Handles
+        ctx.strokeStyle = "#d32f2f";
+        ctx.lineWidth = 8;
+        ctx.beginPath();
+        ctx.moveTo(0, 0);
+        ctx.lineTo(25, 30);
+        ctx.stroke();
+        ctx.restore();
+
+        // Pivot Screw
+        ctx.fillStyle = "#333";
+        ctx.beginPath();
+        ctx.arc(0, 0, 4, 0, Math.PI*2);
+        ctx.fill();
+
+        ctx.restore();
+    }
+
+    function gameLoop() {
+        if (!gameActive) return;
+
+        // Clear Screen
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // Draw Ground
+        ctx.fillStyle = "#556B2F";
+        ctx.fillRect(0, 550, 800, 50);
+
+        // Draw Trunk
+        ctx.strokeStyle = "#5d4037";
+        ctx.lineWidth = 18;
+        ctx.lineCap = "round";
+        ctx.beginPath();
+        ctx.moveTo(400, 600);
+        ctx.lineTo(400, 500);
+        ctx.stroke();
+
+        // Draw Branches
+        branches.forEach(branch => {
+            if (branch.pruned) return;
+
+            // Set color based on Growth Type (Rule: New vs Old)
+            if (branch.growthType === 'new') {
+                ctx.strokeStyle = "#66BB6A"; // vibrant light green
+            } else {
+                ctx.strokeStyle = "#8d6e63"; // wooden brown
+            }
+
+            // Thickness based on depth
+            ctx.lineWidth = Math.max(2, 10 - branch.depth * 1.5);
+            ctx.lineCap = "round";
+            
+            ctx.beginPath();
+            ctx.moveTo(branch.startX, branch.startY);
+            ctx.lineTo(branch.endX, branch.endY);
+            ctx.stroke();
+
+            // Draw some tiny olive leaves on new growth
+            if (branch.growthType === 'new') {
+                ctx.fillStyle = varieties[currentVarietyIndex].color;
+                ctx.beginPath();
+                ctx.arc(branch.endX, branch.endY, 4, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        });
+
+        // Render & Update Floating Score Feedbacks
+        for (let i = scoreFeedbacks.length - 1; i >= 0; i--) {
+            let f = scoreFeedbacks[i];
+            ctx.fillStyle = f.color;
+            ctx.font = `bold ${20 + (1 - f.alpha)*10}px Arial`;
+            ctx.globalAlpha = f.alpha;
+            ctx.fillText(f.text, f.x, f.y);
+            f.y -= 1; // Float up
+            f.alpha -= 0.02; // Fade out
+            if (f.alpha <= 0) {
+                scoreFeedbacks.splice(i, 1);
+            }
+        }
+        ctx.globalAlpha = 1.0; // Reset alpha
+
+        // Draw Player's Hand and Shears
+        drawHandAndShears();
+
+        requestAnimationFrame(gameLoop);
+    }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,1319 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>خبير تقليم الزيتون – النسخة المتقدمة</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════
+   DESIGN SYSTEM
+═══════════════════════════════════════ */
+:root {
+  --o50:#f5f3ea; --o100:#e9e5cc; --o200:#d0c98f; --o300:#b2a84e;
+  --o400:#8f8730; --o500:#6d6620; --o600:#534e18; --o700:#3b3711;
+  --o800:#27250b; --o900:#161405; --o950:#0c0b02;
+  --earth:#2a1c0d; --bark:#4a2e15; --sand:#b8934a;
+  --emerald:#22c55e; --yellow:#fbbf24; --red:#f87171; --sky:#60a5fa;
+  --white:#f0ead8;
+  --radius:18px; --gap:10px;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+
+html,body{
+  min-height:100dvh; font-family:'Cairo',sans-serif;
+  background: var(--earth);
+  background-image:
+    radial-gradient(ellipse 80% 60% at 20% 0%,#3a5a1a22,transparent),
+    radial-gradient(ellipse 60% 40% at 80% 100%,#1a3a0a18,transparent);
+  color:var(--white); display:flex; flex-direction:column;
+  overflow-x:hidden;
+}
+
+/* ─── IMAGE SPRITE ─── */
+/* o2.jpg: 3-col × 2-row composite panel */
+.panel{
+  background:url('o2.jpg') no-repeat;
+  background-size:300% 200%;
+  width:100%; height:100%; position:absolute; inset:0;
+}
+.p-grove  {background-position:0%   0%  }   /* top-left  : olive grove    */
+.p-sapling{background-position:50%  0%  }   /* top-mid   : young sapling  */
+.p-citrus {background-position:100% 0%  }   /* top-right : citrus bush    */
+.p-shears1{background-position:0%   100%}   /* bot-left  : scissors 1     */
+.p-bloom  {background-position:50%  100%}   /* bot-mid   : bloom branch   */
+.p-shears2{background-position:100% 100%}   /* bot-right : scissors 2     */
+
+/* fallback gradient if image missing */
+.p-grove  {--fb:linear-gradient(135deg,#3a5a1a,#5a8a2a)}
+.p-citrus {--fb:linear-gradient(135deg,#5a3a10,#8a6020)}
+.p-sapling{--fb:linear-gradient(135deg,#1a3a10,#3a6a20)}
+.p-shears1,.p-shears2,.p-bloom{--fb:linear-gradient(135deg,#1a2a10,#2a4a18)}
+
+/* ─── LAYOUT ─── */
+header{
+  background:#1a120899; backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--o600)33;
+  padding:8px 14px; display:flex; justify-content:space-between;
+  align-items:center; position:sticky; top:0; z-index:50;
+}
+.logo{display:flex;align-items:center;gap:10px}
+.logo-icon{font-size:1.8rem;filter:drop-shadow(0 0 8px #8f873044)}
+.logo-title{font-size:.85rem;font-weight:900;color:var(--o200);line-height:1.2}
+.logo-sub{font-size:.5rem;letter-spacing:2px;text-transform:uppercase;color:var(--o400)}
+.lang-btn{
+  background:var(--o700)66; border:1px solid var(--o500)44;
+  color:var(--o200); font-family:'Cairo',sans-serif;
+  font-size:.6rem; font-weight:700; padding:5px 12px;
+  border-radius:50px; cursor:pointer; transition:all .2s;
+}
+.lang-btn:hover{background:var(--o600)88}
+
+main{flex:1;max-width:460px;margin:0 auto;width:100%;padding:12px;display:flex;flex-direction:column;justify-content:center;gap:var(--gap)}
+
+/* ─── CARDS ─── */
+.card{
+  background:linear-gradient(160deg,#201a0bcc,#14100688);
+  border:1px solid var(--o700)55;
+  border-radius:var(--radius); padding:16px;
+  box-shadow:0 6px 30px #0000005a, inset 0 1px 0 var(--o500)18;
+}
+
+/* ─── HOME SCREEN ─── */
+.home-title{font-size:1.4rem;font-weight:900;color:var(--o200);text-align:center;line-height:1.3;margin-bottom:4px}
+.home-sub{font-size:.7rem;color:var(--o400);text-align:center;margin-bottom:14px}
+
+/* Difficulty pills */
+.diff-row{display:flex;gap:8px;margin-bottom:12px}
+.diff-btn{
+  flex:1;padding:10px 6px;border-radius:12px;
+  border:1.5px solid var(--o700);background:var(--o900)88;
+  color:var(--o300);font-family:'Cairo',sans-serif;font-size:.7rem;font-weight:700;
+  cursor:pointer;transition:all .2s;text-align:center;line-height:1.5;
+}
+.diff-btn.active{border-color:var(--o400);background:var(--o700)88;color:var(--o100)}
+.diff-btn:hover{border-color:var(--o500);background:var(--o800)}
+.diff-icon{font-size:1.4rem;display:block;margin-bottom:2px}
+
+/* Variety select */
+.field-label{font-size:.65rem;font-weight:900;color:var(--o300);display:block;margin-bottom:5px}
+select.variety{
+  width:100%;background:var(--o950);border:1px solid var(--o600)66;
+  color:var(--o200);border-radius:12px;padding:10px 12px;
+  font-size:.7rem;font-family:'Cairo',sans-serif;font-weight:700;
+  cursor:pointer;outline:none;appearance:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%238f8730' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:left 12px center;
+}
+
+/* Achievement strip */
+.ach-strip{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:4px}
+.ach-badge{
+  background:var(--o800)88;border:1px solid var(--o600)55;
+  border-radius:8px;padding:4px 8px;font-size:.6rem;color:var(--o300);
+  display:flex;align-items:center;gap:4px;
+}
+.ach-badge.earned{border-color:var(--yellow)88;color:var(--yellow);background:var(--o700)55}
+
+.btn-start{
+  width:100%;padding:15px;
+  background:linear-gradient(135deg,var(--o600),#2d6a2d);
+  border:none;border-radius:16px;color:#fff;
+  font-family:'Cairo',sans-serif;font-size:.95rem;font-weight:900;
+  cursor:pointer;transition:all .2s;
+  box-shadow:0 4px 20px #00000055, inset 0 1px 0 #ffffff18;
+  letter-spacing:.3px;
+}
+.btn-start:hover{filter:brightness(1.12);transform:translateY(-1px);box-shadow:0 8px 28px #00000066}
+.btn-start:active{transform:scale(.97)}
+
+/* ─── HUD ─── */
+.hud{
+  display:grid;grid-template-columns:1fr auto 1fr;
+  align-items:center;gap:8px;
+}
+.hud-block{text-align:center}
+.hud-label{font-size:.55rem;font-weight:700;color:var(--o400);letter-spacing:.5px;text-transform:uppercase}
+.hud-val{font-size:1.25rem;font-weight:900;line-height:1}
+.hud-val.score{color:var(--yellow)}
+.hud-val.combo{color:var(--emerald);font-size:.9rem}
+
+/* Timer ring */
+.timer-wrap{position:relative;width:52px;height:52px;margin:0 auto}
+.timer-svg{transform:rotate(-90deg);width:52px;height:52px}
+.timer-bg{fill:none;stroke:var(--o800);stroke-width:4}
+.timer-fg{fill:none;stroke:var(--emerald);stroke-width:4;stroke-linecap:round;
+  stroke-dasharray:132;stroke-dashoffset:0;transition:stroke .3s}
+.timer-num{
+  position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  font-size:.9rem;font-weight:900;color:var(--white);
+}
+
+/* Hearts */
+.hearts{display:flex;gap:3px;justify-content:center}
+.heart{font-size:1rem;transition:transform .3s}
+.heart.lost{filter:grayscale(1) opacity(.3);transform:scale(.8)}
+
+/* Progress bar */
+.progress-outer{background:var(--o800);border-radius:4px;height:5px;overflow:hidden}
+.progress-inner{height:100%;border-radius:4px;background:linear-gradient(90deg,var(--o400),var(--emerald));transition:width .4s cubic-bezier(.4,0,.2,1)}
+
+/* Stage label */
+.stage-lbl{
+  background:var(--o800)88;border:1px solid var(--o600)33;
+  border-radius:12px;padding:8px 12px;text-align:center;
+  font-size:.72rem;font-weight:700;color:var(--o100);line-height:1.6;
+}
+
+/* ─── WORKSPACE ─── */
+.workspace{
+  position:relative;width:100%;aspect-ratio:4/3;
+  background:var(--o950);border-radius:20px;overflow:hidden;
+  border:2px solid var(--o700)55;
+  box-shadow:0 4px 24px #00000066;
+}
+.workspace.shake{animation:shake .4s ease-in-out}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-7px) rotate(-.5deg)}75%{transform:translateX(7px) rotate(.5deg)}}
+
+/* Stage views */
+.sv{position:absolute;inset:0;display:none;animation:fadeIn .25s ease}
+.sv.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:scale(.97)}to{opacity:1;transform:scale(1)}}
+
+/* ── Stage 1 & 3: two-panel choice ── */
+.choice-grid{display:grid;grid-template-columns:1fr 1fr;height:100%;gap:5px;padding:5px}
+.choice-card{
+  position:relative;border-radius:14px;overflow:hidden;
+  cursor:pointer;border:2px solid transparent;transition:border-color .2s,transform .12s;
+  background:var(--o800);
+}
+.choice-card:hover{transform:scale(1.04);border-color:var(--o400)66}
+.choice-card:active{transform:scale(.96)}
+.choice-card.correct-flash{animation:correctFlash .4s ease}
+.choice-card.wrong-flash{animation:wrongFlash .4s ease}
+@keyframes correctFlash{50%{border-color:var(--emerald);box-shadow:0 0 20px var(--emerald)55}}
+@keyframes wrongFlash{50%{border-color:var(--red);box-shadow:0 0 20px var(--red)55}}
+.choice-label{
+  position:absolute;bottom:6px;left:5px;right:5px;
+  background:#000000cc;padding:5px 8px;border-radius:8px;
+  text-align:center;font-size:.62rem;font-weight:800;line-height:1.3;
+}
+.lbl-olive{color:var(--emerald)}
+.lbl-citrus{color:#fb923c}
+.lbl-blue{color:var(--sky)}
+
+/* ── Stage 2: Season choice (4 cards, no image) ── */
+.season-grid{
+  display:grid;grid-template-columns:1fr 1fr;
+  grid-template-rows:1fr 1fr;height:100%;gap:5px;padding:5px;
+}
+.season-card{
+  border-radius:14px;cursor:pointer;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;
+  border:2px solid transparent;transition:all .18s;
+  font-weight:800;
+}
+.season-card:hover{transform:scale(1.04)}
+.season-card:active{transform:scale(.96)}
+.season-card.winter{background:linear-gradient(160deg,#0f1f3a,#1a3055)}
+.season-card.spring{background:linear-gradient(160deg,#1a3a1a,#2a6a2a)}
+.season-card.summer{background:linear-gradient(160deg,#3a2a0a,#6a4a10)}
+.season-card.autumn{background:linear-gradient(160deg,#3a1a0a,#6a2a10)}
+.season-icon{font-size:2rem}
+.season-name{font-size:.7rem;color:var(--white)}
+.season-name-en{font-size:.5rem;color:var(--o300)}
+
+/* ── Stage 3: Tool choice (3 tools) ── */
+.tool-grid{display:flex;height:100%;gap:5px;padding:5px}
+.tool-card{
+  flex:1;border-radius:14px;cursor:pointer;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;
+  background:var(--o800)88;border:2px solid transparent;transition:all .18s;
+}
+.tool-card:hover{border-color:var(--o400);background:var(--o700)88;transform:translateY(-3px)}
+.tool-card:active{transform:scale(.95)}
+.tool-icon{font-size:2.6rem;filter:drop-shadow(0 2px 6px #00000066)}
+.tool-name{font-size:.68rem;font-weight:800;color:var(--o100);text-align:center}
+.tool-name-en{font-size:.5rem;color:var(--o400)}
+.tool-task{
+  background:var(--o900)99;border:1px solid var(--o600)33;
+  border-radius:10px;padding:6px 10px;margin:5px;position:absolute;bottom:0;left:0;right:0;
+  text-align:center;font-size:.65rem;font-weight:700;color:var(--o200);
+}
+
+/* ── Stage 4: Zone select (with image) ── */
+.zone-btn{
+  position:absolute;border:2px dashed;border-radius:50%;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;
+  transition:background .2s,transform .1s;
+}
+.zone-btn:hover{transform:scale(1.06)}
+.zone-btn:active{transform:scale(.94)}
+.zone-btn.basal{border-color:var(--yellow);background:var(--yellow)18;
+  bottom:8%;left:22%;right:22%;height:22%}
+.zone-btn.basal:hover{background:var(--yellow)33}
+.zone-btn.canopy{border-color:var(--sky);background:var(--sky)15;
+  top:6%;left:8%;right:8%;height:28%}
+.zone-btn.canopy:hover{background:var(--sky)28}
+.zone-btn.trunk{border-color:var(--red);background:var(--red)12;
+  top:38%;left:40%;width:20%;height:16%}
+.zone-btn.trunk:hover{background:var(--red)22}
+.zone-tag{
+  background:#000000e0;padding:3px 8px;border-radius:7px;
+  font-size:.55rem;font-weight:800;white-space:nowrap;
+}
+.zone-tag.basal{color:var(--yellow)}
+.zone-tag.canopy{color:var(--sky)}
+.zone-tag.trunk{color:var(--red)}
+
+/* ── Stage 5: Moving precision target ── */
+.cut-info{
+  position:absolute;top:8px;left:8px;right:8px;
+  background:#000000cc;border-radius:8px;padding:5px 10px;
+  text-align:center;font-size:.6rem;font-weight:700;color:var(--o200);z-index:5;
+}
+.cut-target{
+  position:absolute;width:58px;height:58px;border-radius:50%;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;
+  font-size:1.3rem;transition:transform .1s;z-index:4;
+  box-shadow:0 0 0 0 currentColor;
+}
+.cut-target:active{transform:scale(.85)!important}
+.cut-target.perfect{
+  border:4px solid var(--emerald);background:var(--emerald)33;
+  animation:pulseGreen 1.4s ease-in-out infinite;
+}
+.cut-target.wrong{
+  border:4px solid var(--red);background:var(--red)25;
+}
+@keyframes pulseGreen{0%,100%{box-shadow:0 0 0 0 #22c55e55}50%{box-shadow:0 0 0 12px transparent}}
+
+/* ── Floating feedback ── */
+.feedback-float{
+  position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  pointer-events:none;opacity:0;transition:opacity .2s;z-index:20;
+}
+.feedback-float.show{opacity:1}
+.feedback-txt{font-size:2rem;font-weight:900;text-shadow:0 4px 16px #000000bb}
+
+/* Particles (CSS only) */
+.particle{
+  position:absolute;pointer-events:none;font-size:.9rem;
+  animation:rise 1s ease-out forwards;
+}
+@keyframes rise{from{transform:translateY(0);opacity:1}to{transform:translateY(-60px);opacity:0}}
+
+/* ─── LOG ─── */
+.log{
+  background:#0a090588;border:1px solid var(--o800);
+  border-radius:12px;padding:8px 12px;font-size:.6rem;
+  height:52px;overflow-y:auto;font-family:monospace;color:var(--o300);line-height:1.7;
+}
+
+/* ─── BUTTONS ROW ─── */
+.btn-row{display:flex;gap:8px}
+.btn-sm{
+  flex:1;padding:11px;border-radius:12px;border:none;
+  font-family:'Cairo',sans-serif;font-size:.7rem;font-weight:700;cursor:pointer;transition:all .15s;
+}
+.btn-back{background:var(--o800)88;color:var(--o200)}
+.btn-back:hover{background:var(--o700)}
+.btn-retry{background:var(--o600);color:var(--o100)}
+.btn-retry:hover{background:var(--o500)}
+
+/* ─── SCORE SCREEN ─── */
+.score-wrap{
+  background:linear-gradient(160deg,#201a0bee,#14100688);
+  border:2px solid var(--o600)44;border-radius:24px;
+  padding:24px 18px;text-align:center;
+  box-shadow:0 12px 48px #00000066;
+}
+.stars-row{display:flex;justify-content:center;gap:8px;margin:10px 0}
+.star{font-size:2.8rem;filter:grayscale(1) opacity(.3);transition:all .4s}
+.star.lit{filter:none;animation:starPop .5s cubic-bezier(.36,.07,.19,.97)}
+@keyframes starPop{0%{transform:scale(0) rotate(-20deg)}60%{transform:scale(1.3) rotate(5deg)}100%{transform:scale(1) rotate(0)}}
+.final-score-val{font-size:3.2rem;font-weight:900;color:var(--yellow);line-height:1}
+.perf-badge{
+  background:var(--o700)44;border:1px solid var(--o600)44;
+  border-radius:12px;padding:10px 14px;margin:10px 0;
+  font-size:.72rem;font-weight:700;color:var(--o200);line-height:1.8;
+}
+.stats-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin:10px 0}
+.stat-box{background:var(--o900)88;border:1px solid var(--o700)44;border-radius:10px;padding:8px 4px;text-align:center}
+.stat-val{font-size:1rem;font-weight:900;color:var(--o200)}
+.stat-lbl{font-size:.52rem;color:var(--o400);margin-top:2px}
+.btn-primary{
+  width:100%;padding:13px;
+  background:linear-gradient(135deg,var(--o600),#2d6a2d);
+  border:none;border-radius:14px;color:#fff;
+  font-family:'Cairo',sans-serif;font-size:.85rem;font-weight:900;
+  cursor:pointer;margin-bottom:7px;transition:filter .2s;
+}
+.btn-primary:hover{filter:brightness(1.1)}
+.btn-ghost{
+  width:100%;padding:11px;background:var(--o800)66;border:none;
+  border-radius:12px;color:var(--o200);font-family:'Cairo',sans-serif;
+  font-size:.7rem;font-weight:700;cursor:pointer;transition:background .2s;
+}
+.btn-ghost:hover{background:var(--o700)88}
+
+/* ── Stage 6: Physics Simulation ── */
+#sv6-canvas{width:100%;height:100%;display:block;cursor:crosshair;touch-action:none}
+.sv6-bg{
+  position:absolute;inset:0;
+  background:url('o2.jpg') 50% 100% / 300% 200% no-repeat;
+  opacity:.38;
+}
+.sv6-overlay{
+  position:absolute;inset:0;
+  background:linear-gradient(160deg,rgba(10,8,2,.55),rgba(10,8,2,.3));
+}
+.sv6-hint{
+  position:absolute;bottom:6px;left:6px;right:6px;
+  text-align:center;font-size:.58rem;font-weight:700;
+  color:var(--o200);background:#000000bb;
+  padding:4px 8px;border-radius:7px;z-index:5;
+  animation:hintPulse 2s ease-in-out infinite;
+}
+@keyframes hintPulse{0%,100%{opacity:.7}50%{opacity:1}}
+.sv6-badge{
+  position:absolute;top:8px;left:50%;transform:translateX(-50%);
+  background:var(--o800)cc;border:1px solid var(--o600)55;
+  border-radius:10px;padding:4px 12px;font-size:.58rem;font-weight:800;
+  color:var(--emerald);z-index:5;white-space:nowrap;
+}
+
+/* ─── HIDDEN ─── */
+.hidden{display:none!important}
+</style>
+</head>
+<body>
+
+<!-- ═══ HEADER ═══ -->
+<header>
+  <div class="logo">
+    <span class="logo-icon">🌿</span>
+    <div>
+      <div class="logo-title lang-ar">خبير تقليم الزيتون</div>
+      <div class="logo-title lang-en hidden" dir="ltr">Olive Pruning Expert</div>
+      <div class="logo-sub">Advanced · 2026</div>
+    </div>
+  </div>
+  <button class="lang-btn" onclick="toggleLang()">🌐 <span id="langLbl">English</span></button>
+</header>
+
+<main>
+
+<!-- ══════════════════════════════════
+     SCREEN: HOME
+══════════════════════════════════ -->
+<section id="s-home">
+
+  <div class="card" style="text-align:center">
+    <div class="home-title">
+      <span class="lang-ar">🌳 محاكاة تقليم الزيتون<br><span style="color:var(--o400);font-size:.85rem">النسخة المتقدمة</span></span>
+      <span class="lang-en hidden" dir="ltr">🌳 Olive Pruning Simulation<br><span style="color:var(--o400);font-size:.85rem">Advanced Edition</span></span>
+    </div>
+    <div class="home-sub lang-ar">٦ مراحل · مؤقت · قلوب · مضاعف الكومبو · محاكاة فيزيائية</div>
+    <div class="home-sub lang-en hidden" dir="ltr">6 Stages · Timer · Lives · Combo Multiplier · Physics Sim</div>
+  </div>
+
+  <div class="card">
+    <label class="field-label lang-ar">⚡ مستوى الصعوبة:</label>
+    <label class="field-label lang-en hidden" dir="ltr">⚡ Difficulty:</label>
+    <div class="diff-row">
+      <button class="diff-btn active" id="diff-easy"   onclick="setDiff('easy')">
+        <span class="diff-icon">🌱</span>
+        <span class="lang-ar">سهل<br><span style="font-size:.55rem;color:var(--o400)">١٥ ثانية</span></span>
+        <span class="lang-en hidden" dir="ltr">Easy<br><span style="font-size:.55rem;color:var(--o400)">15 sec</span></span>
+      </button>
+      <button class="diff-btn" id="diff-medium" onclick="setDiff('medium')">
+        <span class="diff-icon">🌿</span>
+        <span class="lang-ar">متوسط<br><span style="font-size:.55rem;color:var(--o400)">١٠ ثوانٍ</span></span>
+        <span class="lang-en hidden" dir="ltr">Medium<br><span style="font-size:.55rem;color:var(--o400)">10 sec</span></span>
+      </button>
+      <button class="diff-btn" id="diff-hard"   onclick="setDiff('hard')">
+        <span class="diff-icon">🌳</span>
+        <span class="lang-ar">خبير<br><span style="font-size:.55rem;color:var(--o400)">٦ ثوانٍ</span></span>
+        <span class="lang-en hidden" dir="ltr">Expert<br><span style="font-size:.55rem;color:var(--o400)">6 sec</span></span>
+      </button>
+    </div>
+
+    <label class="field-label lang-ar">🏷️ صنف الزيتون:</label>
+    <label class="field-label lang-en hidden" dir="ltr">🏷️ Olive Variety:</label>
+    <select id="varietySel" class="variety" onchange="updateVariety()">
+      <option value="arbequina" data-m="2.0">اربيكانا (Arbequina) — ×٢٫٠</option>
+      <option value="k18"       data-m="1.8">كي ١٨ (K18) — ×١٫٨</option>
+      <option value="ghalat"    data-m="1.6">جلط (Ghalat) — ×١٫٦</option>
+      <option value="qaisi"     data-m="1.5">قيسي (Qaisi) — ×١٫٥</option>
+      <option value="kalamata"  data-m="1.4">كلمتا (Kalamata) — ×١٫٤</option>
+      <option value="sourani"   data-m="1.3">صوراني (Sourani) — ×١٫٣</option>
+      <option value="manzanilla"data-m="1.2">منزرينا (Manzanilla) — ×١٫٢</option>
+      <option value="nabali"    data-m="0.9">نابالي (Nabali) — ×٠٫٩</option>
+    </select>
+  </div>
+
+  <!-- Achievements strip -->
+  <div class="card" id="ach-card">
+    <div class="field-label lang-ar">🏅 إنجازاتك:</div>
+    <div class="field-label lang-en hidden" dir="ltr">🏅 Your Achievements:</div>
+    <div class="ach-strip" id="ach-list">
+      <div class="ach-badge" id="ach-first">🌟 <span class="lang-ar">أول لعبة</span><span class="lang-en hidden">First Game</span></div>
+      <div class="ach-badge" id="ach-perfect">💎 <span class="lang-ar">قص مثالي</span><span class="lang-en hidden">Perfect Cut</span></div>
+      <div class="ach-badge" id="ach-combo">🔥 <span class="lang-ar">كومبو ×٣</span><span class="lang-en hidden">Combo ×3</span></div>
+      <div class="ach-badge" id="ach-expert">👑 <span class="lang-ar">٣ نجوم</span><span class="lang-en hidden">3 Stars</span></div>
+    </div>
+  </div>
+
+  <button class="btn-start" onclick="startGame()">
+    🚀 <span class="lang-ar">ابدأ محاكاة التقليم</span>
+    <span class="lang-en hidden">Start Pruning Simulation</span>
+  </button>
+
+</section>
+
+
+<!-- ══════════════════════════════════
+     SCREEN: GAMEPLAY
+══════════════════════════════════ -->
+<section id="s-game" class="hidden">
+
+  <!-- HUD -->
+  <div class="card" style="padding:10px 14px">
+    <div class="hud">
+      <div class="hud-block">
+        <div class="hud-label lang-ar">النقاط</div>
+        <div class="hud-label lang-en hidden">Score</div>
+        <div class="hud-val score" id="hud-score">0</div>
+        <div class="hud-val combo" id="hud-combo">×1</div>
+      </div>
+      <!-- Timer ring -->
+      <div>
+        <div class="timer-wrap">
+          <svg class="timer-svg" viewBox="0 0 44 44">
+            <circle class="timer-bg" cx="22" cy="22" r="18"/>
+            <circle class="timer-fg" id="timer-ring" cx="22" cy="22" r="18"
+              stroke-dasharray="113" stroke-dashoffset="0"/>
+          </svg>
+          <div class="timer-num" id="timer-num">15</div>
+        </div>
+        <div class="hearts" id="hearts-row">
+          <span class="heart" id="h1">❤️</span>
+          <span class="heart" id="h2">❤️</span>
+          <span class="heart" id="h3">❤️</span>
+        </div>
+      </div>
+      <div class="hud-block" style="text-align:left">
+        <div class="hud-label lang-ar">الصنف</div>
+        <div class="hud-label lang-en hidden">Variety</div>
+        <div class="hud-val" style="font-size:.75rem;color:var(--white)" id="hud-var">اربيكانا</div>
+        <div style="font-size:.6rem;color:var(--o400)" id="hud-mult">×٢٫٠</div>
+      </div>
+    </div>
+    <!-- Progress -->
+    <div style="margin-top:8px">
+      <div style="display:flex;justify-content:space-between;font-size:.55rem;color:var(--o400);margin-bottom:3px">
+        <span class="lang-ar" id="stage-lbl-ar">المرحلة ١ من ٥</span>
+        <span class="lang-en hidden" id="stage-lbl-en">Stage 1 of 5</span>
+        <span id="prog-pct">0%</span>
+      </div>
+      <div class="progress-outer"><div class="progress-inner" id="prog-bar" style="width:0%"></div></div>
+    </div>
+  </div>
+
+  <!-- Instructions -->
+  <div class="stage-lbl" id="g-instr"></div>
+
+  <!-- Workspace -->
+  <div class="workspace" id="workspace">
+
+    <!-- Stage 1: Tree ID (olive vs citrus) -->
+    <div class="sv" id="sv1">
+      <div class="choice-grid">
+        <div class="choice-card" id="cc-citrus" onclick="stageAnswer(1,'citrus')">
+          <div class="panel p-citrus"></div>
+          <div class="choice-label lbl-citrus">🍊 <span class="lang-ar">حمضيات</span><span class="lang-en hidden">Citrus</span></div>
+        </div>
+        <div class="choice-card" id="cc-olive" onclick="stageAnswer(1,'olive')">
+          <div class="panel p-grove"></div>
+          <div class="choice-label lbl-olive">🌳 <span class="lang-ar">زيتون</span><span class="lang-en hidden">Olive</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stage 2: Season -->
+    <div class="sv" id="sv2">
+      <div class="season-grid">
+        <div class="season-card winter" onclick="stageAnswer(2,'winter')">
+          <span class="season-icon">❄️</span>
+          <span class="season-name lang-ar">الشتاء المتأخر</span>
+          <span class="season-name lang-en hidden">Late Winter</span>
+          <span class="season-name-en">Jan – Feb</span>
+        </div>
+        <div class="season-card spring" onclick="stageAnswer(2,'spring')">
+          <span class="season-icon">🌸</span>
+          <span class="season-name lang-ar">الربيع</span>
+          <span class="season-name lang-en hidden">Spring</span>
+          <span class="season-name-en">Mar – May</span>
+        </div>
+        <div class="season-card summer" onclick="stageAnswer(2,'summer')">
+          <span class="season-icon">☀️</span>
+          <span class="season-name lang-ar">الصيف</span>
+          <span class="season-name lang-en hidden">Summer</span>
+          <span class="season-name-en">Jun – Aug</span>
+        </div>
+        <div class="season-card autumn" onclick="stageAnswer(2,'autumn')">
+          <span class="season-icon">🍂</span>
+          <span class="season-name lang-ar">الخريف</span>
+          <span class="season-name lang-en hidden">Autumn</span>
+          <span class="season-name-en">Sep – Nov</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stage 3: Tool -->
+    <div class="sv" id="sv3" style="display:none">
+      <div class="tool-grid" id="tool-grid">
+        <!-- filled by JS to randomise order -->
+      </div>
+      <div class="tool-task" id="tool-task"></div>
+    </div>
+
+    <!-- Stage 4: Zone -->
+    <div class="sv" id="sv4">
+      <div class="panel p-sapling" style="position:absolute;inset:0"></div>
+      <div class="zone-btn canopy" onclick="stageAnswer(4,'canopy')">
+        <span class="zone-tag canopy">✂️ <span class="lang-ar">التاج</span><span class="lang-en hidden">Canopy</span></span>
+      </div>
+      <div class="zone-btn trunk" onclick="stageAnswer(4,'trunk')">
+        <span class="zone-tag trunk">✂️ <span class="lang-ar">الجذع</span><span class="lang-en hidden">Trunk</span></span>
+      </div>
+      <div class="zone-btn basal" onclick="stageAnswer(4,'basal')">
+        <span class="zone-tag basal">✂️ <span class="lang-ar">السرطانات المائية</span><span class="lang-en hidden">Basal Suckers</span></span>
+      </div>
+    </div>
+
+    <!-- Stage 5: Precision cut (moving target) -->
+    <div class="sv" id="sv5">
+      <!-- panel randomised by JS -->
+      <div class="cut-info lang-ar">✂️ اضغط نقطة القص الخضراء قبل انتهاء الوقت!</div>
+      <div class="cut-info lang-en hidden" dir="ltr">✂️ Tap the green target before time runs out!</div>
+      <div id="cut-good" class="cut-target perfect" onclick="stageAnswer(5,'perfect')" style="top:50%;left:48%;transform:translate(-50%,-50%)">🟢</div>
+      <div id="cut-bad1" class="cut-target wrong"   onclick="stageAnswer(5,'wrong')"   style="top:22%;left:18%;transform:translate(-50%,-50%)">🔴</div>
+      <div id="cut-bad2" class="cut-target wrong"   onclick="stageAnswer(5,'wrong')"   style="top:70%;left:75%;transform:translate(-50%,-50%)">🔴</div>
+    </div>
+
+    <!-- Stage 6: Physics simulation – drag shears to cut node -->
+    <div class="sv" id="sv6">
+      <div class="sv6-bg"></div>
+      <div class="sv6-overlay"></div>
+      <div class="sv6-badge" id="sv6-badge">
+        <span class="lang-ar">✂️ اسحب المقص إلى نقطة العُقلة الحمراء واقطعها!</span>
+        <span class="lang-en hidden">✂️ Drag shears to the red node and cut it!</span>
+      </div>
+      <canvas id="sv6-canvas"></canvas>
+      <div class="sv6-hint lang-ar">📌 اسحب بإصبعك أو الماوس لتحريك المقص نحو الهدف</div>
+      <div class="sv6-hint lang-en hidden" dir="ltr">📌 Drag with finger or mouse to move shears toward target</div>
+    </div>
+
+    <!-- Feedback overlay -->
+    <div class="feedback-float" id="fb-overlay">
+      <div class="feedback-txt" id="fb-txt"></div>
+    </div>
+  </div>
+
+  <!-- Log -->
+  <div class="log" id="g-log">🌿 <span class="lang-ar">نظام تقليم الزيتون المتقدم — مستعد</span><span class="lang-en hidden">Advanced pruning system — ready</span></div>
+
+  <!-- Buttons -->
+  <div class="btn-row">
+    <button class="btn-sm btn-back"  onclick="goHome()">↩️ <span class="lang-ar">القائمة</span><span class="lang-en hidden">Menu</span></button>
+    <button class="btn-sm btn-retry" onclick="retryStage()">🔄 <span class="lang-ar">إعادة المرحلة</span><span class="lang-en hidden">Retry Stage</span></button>
+  </div>
+
+</section>
+
+
+<!-- ══════════════════════════════════
+     SCREEN: SCORE
+══════════════════════════════════ -->
+<section id="s-score" class="hidden">
+  <div class="score-wrap">
+    <div style="font-size:.7rem;color:var(--o400);margin-bottom:4px" class="lang-ar">انتهت الجلسة التدريبية</div>
+    <div style="font-size:.7rem;color:var(--o400);margin-bottom:4px" class="lang-en hidden" dir="ltr">Session Complete</div>
+    <div class="stars-row">
+      <span class="star" id="star1">⭐</span>
+      <span class="star" id="star2">⭐</span>
+      <span class="star" id="star3">⭐</span>
+    </div>
+    <div style="font-size:.6rem;color:var(--o400);margin-bottom:2px" class="lang-ar">مجموع نقاطك</div>
+    <div style="font-size:.6rem;color:var(--o400);margin-bottom:2px" class="lang-en hidden" dir="ltr">Your Total Score</div>
+    <div class="final-score-val" id="final-score">0</div>
+    <div class="perf-badge" id="perf-text"></div>
+    <div class="stats-grid">
+      <div class="stat-box">
+        <div class="stat-val" id="st-correct">0</div>
+        <div class="stat-lbl lang-ar">إجابات صحيحة</div>
+        <div class="stat-lbl lang-en hidden">Correct</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-val" id="st-maxcombo">×1</div>
+        <div class="stat-lbl lang-ar">أعلى كومبو</div>
+        <div class="stat-lbl lang-en hidden">Max Combo</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-val" id="st-time">0s</div>
+        <div class="stat-lbl lang-ar">متوسط وقت</div>
+        <div class="stat-lbl lang-en hidden">Avg Time</div>
+      </div>
+    </div>
+    <button class="btn-primary" onclick="startGame()">🔄 <span class="lang-ar">العب مرة أخرى</span><span class="lang-en hidden">Play Again</span></button>
+    <button class="btn-ghost"   onclick="goHome()">🏠 <span class="lang-ar">القائمة الرئيسية</span><span class="lang-en hidden">Main Menu</span></button>
+  </div>
+</section>
+
+</main>
+
+<footer style="text-align:center;padding:8px;font-size:.5rem;color:var(--o600)88;border-top:1px solid var(--o800)44">
+  محاكاة تقليم الزيتون المتقدمة © 2026 — Advanced Edition
+</footer>
+
+<!-- ═══ AUDIO ═══ -->
+<audio id="aud-correct" src=""></audio>
+<audio id="aud-wrong"   src=""></audio>
+
+<!-- ═══ SCRIPT ═══ -->
+<script>
+/* ══════════════════════════════════════════
+   STATE
+══════════════════════════════════════════ */
+const S = {
+  lang: 'ar',
+  diff: 'easy',
+  timerMax: { easy:15, medium:10, hard:6 },
+  variety: 'arbequina',
+  multiplier: 2.0,
+  score: 0,
+  lives: 3,
+  combo: 1,
+  maxCombo: 1,
+  stage: 1,
+  totalStages: 6,
+  timerVal: 15,
+  timerInterval: null,
+  stageStartTime: 0,
+  stageTimes: [],
+  correctCount: 0,
+  achievements: { first:false, perfect:false, combo3:false, expert:false },
+};
+
+/* Tool stage data */
+const TOOLS = [
+  { id:'shears', icon:'✂️',  nameAr:'مقص التقليم',   nameEn:'Pruning Shears', correct:true  },
+  { id:'saw',    icon:'🪚',  nameAr:'المنشار',        nameEn:'Hand Saw',       correct:false },
+  { id:'knife',  icon:'🔪',  nameAr:'سكين التطعيم',   nameEn:'Grafting Knife', correct:false },
+];
+const TOOL_TASKS = {
+  ar:'أي أداة تستخدم لقطع السرطانات المائية الرفيعة؟',
+  en:'Which tool do you use to cut thin basal suckers?',
+};
+
+/* Panel for stage 5 */
+const CUT_PANELS = ['p-shears1','p-bloom','p-shears2'];
+
+/* ══════════════════════════════════════════
+   AUDIO (Web Audio API)
+══════════════════════════════════════════ */
+let actx;
+function ac() {
+  if (!actx) actx = new (window.AudioContext||window.webkitAudioContext)();
+  if (actx.state==='suspended') actx.resume();
+  return actx;
+}
+function beep(type) {
+  try {
+    const ctx=ac(), o=ctx.createOscillator(), g=ctx.createGain();
+    o.connect(g); g.connect(ctx.destination);
+    const t=ctx.currentTime;
+    if (type==='correct') {
+      o.type='sine'; o.frequency.setValueAtTime(523,t); o.frequency.setValueAtTime(659,t+.1);
+      g.gain.setValueAtTime(.25,t); g.gain.linearRampToValueAtTime(0,t+.35);
+      o.start(t); o.stop(t+.35);
+    } else if (type==='wrong') {
+      o.type='sawtooth'; o.frequency.setValueAtTime(180,t);
+      o.frequency.exponentialRampToValueAtTime(80,t+.3);
+      g.gain.setValueAtTime(.25,t); g.gain.linearRampToValueAtTime(0,t+.3);
+      o.start(t); o.stop(t+.3);
+    } else if (type==='tick') {
+      o.type='sine'; o.frequency.setValueAtTime(800,t);
+      g.gain.setValueAtTime(.06,t); g.gain.linearRampToValueAtTime(0,t+.05);
+      o.start(t); o.stop(t+.05);
+    } else if (type==='cut') {
+      o.type='triangle'; o.frequency.setValueAtTime(350,t);
+      o.frequency.exponentialRampToValueAtTime(60,t+.14);
+      g.gain.setValueAtTime(.3,t); g.gain.linearRampToValueAtTime(0,t+.14);
+      o.start(t); o.stop(t+.14);
+    }
+  } catch(e){}
+}
+
+/* ══════════════════════════════════════════
+   LANGUAGE
+══════════════════════════════════════════ */
+function toggleLang() {
+  S.lang = S.lang==='ar'?'en':'ar';
+  document.getElementById('langLbl').textContent = S.lang==='ar'?'English':'العربية';
+  document.querySelectorAll('.lang-ar').forEach(el=>el.classList.toggle('hidden',S.lang!=='ar'));
+  document.querySelectorAll('.lang-en').forEach(el=>el.classList.toggle('hidden',S.lang==='ar'));
+  document.documentElement.dir = S.lang==='ar'?'rtl':'ltr';
+  if (S.stage && document.getElementById('s-game').classList.contains('hidden')===false) {
+    setInstruction(S.stage);
+  }
+}
+
+/* ══════════════════════════════════════════
+   DIFFICULTY
+══════════════════════════════════════════ */
+function setDiff(d) {
+  S.diff = d;
+  ['easy','medium','hard'].forEach(x => document.getElementById('diff-'+x).classList.toggle('active',x===d));
+}
+
+/* ══════════════════════════════════════════
+   VARIETY
+══════════════════════════════════════════ */
+function updateVariety() {
+  const sel = document.getElementById('varietySel');
+  S.variety = sel.value;
+  S.multiplier = parseFloat(sel.options[sel.selectedIndex].getAttribute('data-m'));
+  // Short name
+  const txt = sel.options[sel.selectedIndex].text.split('—')[0].replace(/\(.*\)/,'').trim();
+  document.getElementById('hud-var').textContent = txt;
+  document.getElementById('hud-mult').textContent = '×' + S.multiplier.toFixed(1);
+}
+
+/* ══════════════════════════════════════════
+   GAME FLOW
+══════════════════════════════════════════ */
+function startGame() {
+  S.score=0; S.lives=3; S.combo=1; S.maxCombo=1;
+  S.correctCount=0; S.stageTimes=[];
+  updateVariety();
+  showScreen('s-game');
+  renderHearts();
+  setupStage(1);
+  // Unlock first-game achievement
+  if (!S.achievements.first) { S.achievements.first=true; updateAch(); }
+}
+
+function setupStage(n) {
+  S.stage=n;
+  stopTimer();
+  // hide all stage views
+  for(let i=1;i<=6;i++) { const v=document.getElementById('sv'+i); if(v){v.classList.remove('active'); v.style.display='none';} }
+
+  const prog = Math.round(((n-1)/S.totalStages)*100);
+  document.getElementById('prog-bar').style.width = prog+'%';
+  document.getElementById('prog-pct').textContent = prog+'%';
+  document.getElementById('stage-lbl-ar').textContent = `المرحلة ${n} من ${S.totalStages}`;
+  document.getElementById('stage-lbl-en').textContent = `Stage ${n} of ${S.totalStages}`;
+
+  // Stage-specific setup
+  if (n===3) buildToolStage();
+  if (n===5) buildCutStage();
+  if (n===6) buildPhysicsStage();
+
+  const sv = document.getElementById('sv'+n);
+  if(sv){ sv.style.display='block'; sv.classList.add('active'); }
+  setInstruction(n);
+  updateScoreHUD();
+  S.stageStartTime = Date.now();
+  startTimer();
+}
+
+function buildToolStage() {
+  const grid = document.getElementById('tool-grid');
+  grid.innerHTML='';
+  const task = document.getElementById('tool-task');
+  task.textContent = S.lang==='ar'? TOOL_TASKS.ar : TOOL_TASKS.en;
+  // Shuffle tools
+  const shuffled = [...TOOLS].sort(()=>Math.random()-.5);
+  shuffled.forEach(t => {
+    const d=document.createElement('div');
+    d.className='tool-card';
+    d.onclick=()=>stageAnswer(3, t.correct?'correct':'wrong');
+    d.innerHTML=`
+      <span class="tool-icon">${t.icon}</span>
+      <span class="tool-name lang-${S.lang==='ar'?'ar':'en'}">${S.lang==='ar'?t.nameAr:t.nameEn}</span>
+    `;
+    grid.appendChild(d);
+  });
+}
+
+function buildCutStage() {
+  const sv=document.getElementById('sv5');
+  // set random panel
+  const panel = CUT_PANELS[Math.floor(Math.random()*CUT_PANELS.length)];
+  // remove any existing panel div
+  sv.querySelectorAll('.panel').forEach(el=>el.remove());
+  const pdiv=document.createElement('div');
+  pdiv.className='panel '+panel;
+  pdiv.style.cssText='position:absolute;inset:0;z-index:0';
+  sv.insertBefore(pdiv, sv.firstChild);
+  // randomise good target position
+  const positions=[
+    {top:'48%',left:'46%'},{top:'55%',left:'52%'},{top:'42%',left:'40%'}
+  ];
+  const pos=positions[Math.floor(Math.random()*positions.length)];
+  const good=document.getElementById('cut-good');
+  good.style.top=pos.top; good.style.left=pos.left;
+  good.style.transform='translate(-50%,-50%)';
+}
+
+function setInstruction(n) {
+  const el = document.getElementById('g-instr');
+  const ar = [
+    '🧭 <strong>المرحلة ١: تمييز الأشجار</strong><br>انقر على شجرة الزيتون الصحيحة لبدء التقليم.',
+    '📅 <strong>المرحلة ٢: موسم التقليم</strong><br>اختر الموسم الأنسب للحصول على أفضل النتائج.',
+    '🔧 <strong>المرحلة ٣: اختيار الأداة</strong><br>أي أداة تناسب قطع السرطانات الرفيعة؟',
+    '📍 <strong>المرحلة ٤: منطقة التقليم</strong><br>حدد موقع السرطانات المائية على الشجرة.',
+    '✂️ <strong>المرحلة ٥: القص الدقيق</strong><br>اضغط النقطة الخضراء قبل انتهاء الوقت!',
+    '🎮 <strong>المرحلة ٦: محاكاة القص الفيزيائية</strong><br>اسحب المقص إلى عُقلة الشجرة واقطعها بدقة!',
+  ];
+  const en = [
+    '🧭 <strong>Stage 1: Tree ID</strong><br>Tap the correct olive tree to begin.',
+    '📅 <strong>Stage 2: Pruning Season</strong><br>Choose the best season for olive pruning.',
+    '🔧 <strong>Stage 3: Tool Selection</strong><br>Which tool is right for thin basal suckers?',
+    '📍 <strong>Stage 4: Pruning Zone</strong><br>Identify where basal suckers grow.',
+    '✂️ <strong>Stage 5: Precision Cut</strong><br>Hit the green target before time runs out!',
+    '🎮 <strong>Stage 6: Physics Simulation</strong><br>Drag the shears to the node and make the cut!',
+  ];
+  el.innerHTML = S.lang==='ar' ? ar[n-1] : en[n-1];
+}
+
+/* ══════════════════════════════════════════
+   ANSWERS
+══════════════════════════════════════════ */
+/* correctness key per stage */
+const CORRECT = { 1:'olive', 2:'winter', 3:'correct', 4:'basal', 5:'perfect', 6:'cut' };
+const PARTIAL  = { 2:'spring', 4:'canopy' }; // partial credit
+
+function stageAnswer(stageNum, answer) {
+  if (S.stage !== stageNum) return; // guard
+  stopTimer();
+  const elapsed = (Date.now()-S.stageStartTime)/1000;
+  S.stageTimes.push(elapsed);
+
+  const correct = CORRECT[stageNum];
+  const partial = PARTIAL[stageNum];
+
+  if (answer === correct) {
+    handleCorrect(stageNum, false);
+  } else if (answer === partial) {
+    handlePartial(stageNum);
+  } else {
+    handleWrong(stageNum);
+  }
+}
+
+function handleCorrect(stageNum, isTimeout) {
+  beep(stageNum===5?'cut': stageNum===6?'cut' :'correct');
+  S.correctCount++;
+  S.combo = Math.min(S.combo+1, 4);
+  if (S.combo>S.maxCombo) S.maxCombo=S.combo;
+  const bonus = Math.round(100 * S.multiplier * S.combo);
+  S.score += bonus;
+  updateScoreHUD();
+  flash('+'+bonus+' 🌿', 'var(--emerald)');
+  spawnParticles(['🌿','✅','⭐','🌱']);
+  log(S.lang==='ar'
+    ? `✅ صواب! +${bonus} (كومبو ×${S.combo})`
+    : `✅ Correct! +${bonus} (combo ×${S.combo})`);
+  if (S.combo>=3 && !S.achievements.combo3){ S.achievements.combo3=true; updateAch(); }
+  if (stageNum===6 && !S.achievements.perfect){ S.achievements.perfect=true; updateAch(); }
+  setTimeout(()=>{
+    if (S.stage<S.totalStages) setupStage(S.stage+1);
+    else endGame();
+  }, 1200);
+}
+
+function handlePartial(stageNum) {
+  beep('correct');
+  S.combo=1;
+  const bonus = Math.round(50 * S.multiplier);
+  S.score += bonus;
+  updateScoreHUD();
+  flash('+'+bonus+' 💛', 'var(--yellow)');
+  log(S.lang==='ar'
+    ? `💛 جواب جزئي! +${bonus}`
+    : `💛 Partial credit! +${bonus}`);
+  setTimeout(()=>{
+    if (S.stage<S.totalStages) setupStage(S.stage+1);
+    else endGame();
+  }, 1200);
+}
+
+function handleWrong(stageNum) {
+  beep('wrong');
+  S.combo=1;
+  S.lives--;
+  renderHearts();
+  shakeWs();
+  flash('-30 ❌', 'var(--red)');
+  S.score = Math.max(0, S.score-30);
+  updateScoreHUD();
+  log(S.lang==='ar' ? `❌ إجابة خاطئة! -30` : `❌ Wrong answer! -30`);
+  if (S.lives<=0) {
+    setTimeout(()=>endGame(), 1000);
+  } else {
+    setTimeout(()=>startTimer(), 800);
+  }
+}
+
+/* ══════════════════════════════════════════
+   TIMER
+══════════════════════════════════════════ */
+function startTimer() {
+  S.timerVal = S.timerMax[S.diff];
+  updateTimerUI(S.timerVal);
+  S.timerInterval = setInterval(()=>{
+    S.timerVal--;
+    updateTimerUI(S.timerVal);
+    if (S.timerVal<=3) beep('tick');
+    if (S.timerVal<=0) {
+      stopTimer();
+      handleWrong(S.stage);
+    }
+  },1000);
+}
+function stopTimer() {
+  clearInterval(S.timerInterval);
+  S.timerInterval=null;
+}
+function updateTimerUI(v) {
+  const max=S.timerMax[S.diff];
+  const pct=v/max; // 1→0
+  const circ=113; // 2πr for r=18
+  const offset=circ*(1-pct);
+  document.getElementById('timer-ring').style.strokeDashoffset=offset;
+  document.getElementById('timer-num').textContent=v;
+  // Color shift
+  const color=v>max*.5?'var(--emerald)':v>max*.25?'var(--yellow)':'var(--red)';
+  document.getElementById('timer-ring').style.stroke=color;
+  document.getElementById('timer-num').style.color=color;
+}
+
+/* ══════════════════════════════════════════
+   HUD & UI HELPERS
+══════════════════════════════════════════ */
+function updateScoreHUD() {
+  document.getElementById('hud-score').textContent = S.score;
+  document.getElementById('hud-combo').textContent = S.combo>1?'×'+S.combo:'×1';
+}
+function renderHearts() {
+  [1,2,3].forEach(i=>{
+    document.getElementById('h'+i).classList.toggle('lost', i>S.lives);
+  });
+}
+function flash(msg, color) {
+  const ov=document.getElementById('fb-overlay');
+  const txt=document.getElementById('fb-txt');
+  txt.textContent=msg; txt.style.color=color;
+  ov.classList.add('show');
+  setTimeout(()=>ov.classList.remove('show'),1100);
+}
+function shakeWs() {
+  const ws=document.getElementById('workspace');
+  ws.classList.add('shake');
+  setTimeout(()=>ws.classList.remove('shake'),500);
+}
+function spawnParticles(icons) {
+  const ws=document.getElementById('workspace');
+  for(let i=0;i<6;i++){
+    const p=document.createElement('div');
+    p.className='particle';
+    p.style.left=Math.random()*80+10+'%';
+    p.style.top=Math.random()*40+20+'%';
+    p.style.animationDelay=Math.random()*.4+'s';
+    p.textContent=icons[Math.floor(Math.random()*icons.length)];
+    ws.appendChild(p);
+    setTimeout(()=>p.remove(),1200);
+  }
+}
+function log(txt) {
+  const box=document.getElementById('g-log');
+  box.innerHTML='<div>🌿 '+txt+'</div>'+box.innerHTML;
+}
+function retryStage() {
+  stopTimer();
+  if (S.stage===3) buildToolStage();
+  if (S.stage===5) buildCutStage();
+  if (S.stage===6) buildPhysicsStage();
+  setInstruction(S.stage);
+  S.stageStartTime=Date.now();
+  startTimer();
+}
+
+/* ══════════════════════════════════════════
+   END GAME
+══════════════════════════════════════════ */
+function endGame() {
+  stopTimer();
+  P6.running=false; if(P6.rafId){cancelAnimationFrame(P6.rafId);P6.rafId=null;}
+  showScreen('s-score');
+  document.getElementById('final-score').textContent=S.score;
+
+  // Stars
+  const starsNeeded = S.lives<=0? 1 : S.score>= (400*S.multiplier)? 3 : S.score>=(200*S.multiplier)? 2 : 1;
+  ['star1','star2','star3'].forEach((id,i)=>{
+    const el=document.getElementById(id);
+    el.classList.remove('lit');
+    if(i<starsNeeded) setTimeout(()=>el.classList.add('lit'),(i+1)*400);
+  });
+  if(starsNeeded===3&&!S.achievements.expert){ S.achievements.expert=true; updateAch(); }
+
+  // Performance text
+  const avgTime = S.stageTimes.length? (S.stageTimes.reduce((a,b)=>a+b,0)/S.stageTimes.length).toFixed(1) : '—';
+  const perf=[
+    { thr:400*S.multiplier, ar:'🏆 خبير زراعي مُعتمد! أداء استثنائي.', en:'🏆 Certified Agriculture Expert! Outstanding.' },
+    { thr:250*S.multiplier, ar:'🌟 مستوى متقدم ممتاز، أنت على الطريق الصحيح!', en:'🌟 Advanced level — you are on the right track!' },
+    { thr:100*S.multiplier, ar:'👍 مستوى جيد. استمر في التدريب لتتحسن!', en:'👍 Good level. Keep practicing to improve!' },
+    { thr:0,                ar:'📚 تحتاج مزيداً من التدريب. لا تستسلم!', en:'📚 More practice needed. Do not give up!' },
+  ];
+  const p=perf.find(x=>S.score>=x.thr);
+  document.getElementById('perf-text').innerHTML = S.lang==='ar'? p.ar : p.en;
+
+  // Stats
+  document.getElementById('st-correct').textContent  = S.correctCount+'/'+S.totalStages;
+  document.getElementById('st-maxcombo').textContent  = '×'+S.maxCombo;
+  document.getElementById('st-time').textContent      = avgTime+'s';
+}
+
+/* ══════════════════════════════════════════
+   STAGE 6 – PHYSICS SIMULATION ENGINE
+   (from olive2.html, fully integrated)
+══════════════════════════════════════════ */
+let P6 = {
+  canvas:null, ctx:null, rafId:null, running:false,
+  shears:{ x:120, y:240, r:26 },
+  node:  { x:0,   y:0,   r:20, cut:false },
+  drag:  false,
+  answered: false
+};
+
+function buildPhysicsStage() {
+  // Reset state
+  P6.drag=false; P6.answered=false;
+  if (P6.rafId) { cancelAnimationFrame(P6.rafId); P6.rafId=null; }
+  P6.running=false;
+
+  const sv = document.getElementById('sv6');
+  P6.canvas = document.getElementById('sv6-canvas');
+  P6.ctx    = P6.canvas.getContext('2d');
+
+  // Size canvas to workspace
+  const ws = document.getElementById('workspace');
+  const r  = ws.getBoundingClientRect();
+  P6.canvas.width  = r.width  || 360;
+  P6.canvas.height = r.height || 270;
+
+  // Position node at centre-ish
+  P6.node.x = P6.canvas.width  * 0.55;
+  P6.node.y = P6.canvas.height * 0.38;
+  P6.node.cut = false;
+  // Shears start lower-left
+  P6.shears.x = P6.canvas.width  * 0.18;
+  P6.shears.y = P6.canvas.height * 0.75;
+
+  // Events – remove old listeners to avoid duplicates
+  P6.canvas.onmousedown  = p6StartDrag;
+  P6.canvas.onmousemove  = p6Drag;
+  P6.canvas.onmouseup    = p6EndDrag;
+  P6.canvas.ontouchstart = p6TouchStart;
+  P6.canvas.ontouchmove  = p6TouchMove;
+  P6.canvas.ontouchend   = p6EndDrag;
+
+  P6.running=true;
+  p6Loop();
+}
+
+function p6Pos(e) {
+  const r = P6.canvas.getBoundingClientRect();
+  const src = e.touches ? e.touches[0] : e;
+  return { x: src.clientX - r.left, y: src.clientY - r.top };
+}
+function p6HitShears(pos) {
+  const d = Math.hypot(pos.x - P6.shears.x, pos.y - P6.shears.y);
+  return d < P6.shears.r + 36;
+}
+function p6StartDrag(e)   { e.preventDefault(); if(p6HitShears(p6Pos(e))) P6.drag=true; }
+function p6TouchStart(e)  { e.preventDefault(); if(p6HitShears(p6Pos(e))) P6.drag=true; }
+function p6TouchMove(e)   { e.preventDefault(); p6MoveShears(p6Pos(e)); }
+function p6Drag(e)        { p6MoveShears(p6Pos(e)); }
+function p6EndDrag()      { P6.drag=false; }
+
+function p6MoveShears(pos) {
+  if (!P6.drag || P6.node.cut || P6.answered) return;
+  P6.shears.x = pos.x;
+  P6.shears.y = pos.y;
+  // Collision check
+  const d = Math.hypot(P6.shears.x - P6.node.x, P6.shears.y - P6.node.y);
+  if (d < P6.node.r + P6.shears.r - 10) {
+    P6.node.cut=true; P6.drag=false; P6.answered=true;
+    stopTimer();
+    stageAnswer(6, 'cut');
+  }
+}
+
+function p6Loop() {
+  if (!P6.running) return;
+  p6Draw();
+  P6.rafId = requestAnimationFrame(p6Loop);
+}
+
+function p6Draw() {
+  const cv=P6.canvas, c=P6.ctx, W=cv.width, H=cv.height, t=Date.now();
+
+  // ── Sky / Ground ──
+  const sky = c.createLinearGradient(0,0,0,H);
+  sky.addColorStop(0,'#87CEEB'); sky.addColorStop(1,'#E0F6FF');
+  c.fillStyle=sky; c.fillRect(0,0,W,H);
+  c.fillStyle='#b8934a'; c.fillRect(0,H-40,W,40);
+
+  // ── Main trunk ──
+  c.lineWidth=16; c.strokeStyle='#4a2e15'; c.lineCap='round'; c.lineJoin='round';
+  c.beginPath();
+  c.moveTo(W*.5, H-40);
+  c.quadraticCurveTo(W*.48, H*.55, W*.5, H*.3);
+  c.stroke();
+
+  // ── Branch going to node ──
+  c.lineWidth=8; c.strokeStyle='#4a2e15';
+  c.beginPath();
+  c.moveTo(W*.5, H*.3);
+  c.quadraticCurveTo(W*.52, H*.33, P6.node.x, P6.node.y);
+  c.stroke();
+
+  if (!P6.node.cut) {
+    // ── Upper tip ──
+    c.lineWidth=5; c.strokeStyle='#4a2e15';
+    c.beginPath();
+    c.moveTo(P6.node.x, P6.node.y);
+    c.lineTo(P6.node.x+18, P6.node.y-50);
+    c.stroke();
+    // leaves on tip
+    p6Leaf(c, P6.node.x+18, P6.node.y-50,  18, 28,  Math.PI/4, '#6d6620');
+    p6Leaf(c, P6.node.x+30, P6.node.y-38,  12, 20, -Math.PI/5, '#8f8730');
+  } else {
+    // fallen branch (rotated away)
+    c.save();
+    c.translate(P6.node.x+50, P6.node.y+80);
+    c.rotate(.55);
+    c.translate(-P6.node.x, -P6.node.y);
+    c.lineWidth=5; c.strokeStyle='#4a2e15';
+    c.beginPath(); c.moveTo(P6.node.x, P6.node.y); c.lineTo(P6.node.x+18, P6.node.y-50); c.stroke();
+    p6Leaf(c, P6.node.x+18, P6.node.y-50, 18, 28, Math.PI/4, '#6d6620');
+    c.restore();
+    // ── Success ring ──
+    c.save(); c.globalAlpha=.9;
+    c.strokeStyle='#22c55e'; c.lineWidth=3;
+    c.beginPath(); c.arc(P6.node.x, P6.node.y, 28, 0, Math.PI*2); c.stroke();
+    c.restore();
+  }
+
+  // ── Leaves on main branch ──
+  const leafPts=[
+    {x:W*.48,y:H*.42,rx:14,ry:24,a: Math.PI/3},
+    {x:W*.52,y:H*.48,rx:11,ry:20,a:-Math.PI/4},
+    {x:W*.47,y:H*.5 ,rx:10,ry:18,a: Math.PI/5},
+  ];
+  leafPts.forEach(lp=>p6Leaf(c,lp.x,lp.y,lp.rx,lp.ry,lp.a,'#6d6620'));
+
+  // ── Target node (pulsing) ──
+  if (!P6.node.cut) {
+    const pulse = Math.sin(t/180)*4;
+    // outer ring
+    c.save(); c.setLineDash([6,4]);
+    c.strokeStyle='#f87171'; c.lineWidth=2.5;
+    c.beginPath(); c.arc(P6.node.x, P6.node.y, P6.node.r+pulse, 0, Math.PI*2); c.stroke();
+    c.restore();
+    // inner dot
+    c.fillStyle='rgba(248,113,113,.5)';
+    c.beginPath(); c.arc(P6.node.x, P6.node.y, 10, 0, Math.PI*2); c.fill();
+    // label
+    c.fillStyle='#1a1205'; c.font='bold 13px Cairo'; c.textAlign='center';
+    const lbl = S.lang==='ar'? 'العُقلة – اقطع هنا' : 'Node – Cut here';
+    c.fillText(lbl, P6.node.x, P6.node.y - P6.node.r - 10);
+  } else {
+    // Success text
+    c.fillStyle='#22c55e'; c.font='bold 18px Cairo'; c.textAlign='center';
+    const ok = S.lang==='ar'? '✂️ قُطع بنجاح!' : '✂️ Cut successful!';
+    c.fillText(ok, P6.node.x, P6.node.y + 50);
+  }
+
+  // ── Shears ──
+  p6DrawShears(c, P6.shears.x, P6.shears.y, P6.drag);
+}
+
+function p6Leaf(c,x,y,rx,ry,a,col) {
+  c.save(); c.translate(x,y); c.rotate(a);
+  c.fillStyle=col;
+  c.beginPath(); c.ellipse(0,0,rx,ry,0,0,Math.PI*2); c.fill();
+  // vein
+  c.strokeStyle='#b2a84e'; c.lineWidth=1; c.globalAlpha=.5;
+  c.beginPath(); c.moveTo(0,-ry*.7); c.lineTo(0,ry*.7); c.stroke();
+  c.restore();
+}
+
+function p6DrawShears(c,x,y,active) {
+  c.save(); c.translate(x,y);
+  const scale = active ? 1.08 : 1;
+  c.scale(scale,scale);
+  // Handles (red circles)
+  c.lineWidth=9; c.strokeStyle=active?'#ef4444':'#f87171';
+  c.beginPath(); c.arc(-14,22,12,0,Math.PI*2); c.stroke();
+  c.beginPath(); c.arc( 14,22,12,0,Math.PI*2); c.stroke();
+  // Handle cross bar
+  c.strokeStyle='#94a3b8'; c.lineWidth=4;
+  c.beginPath(); c.moveTo(-8,12); c.lineTo(8,12); c.stroke();
+  // Blades
+  c.fillStyle='#e2e8f0'; c.strokeStyle='#94a3b8'; c.lineWidth=1.5;
+  // left blade
+  c.beginPath(); c.moveTo(-4,8); c.lineTo(-1,-32); c.lineTo(-14,-6); c.closePath(); c.fill(); c.stroke();
+  // right blade
+  c.beginPath(); c.moveTo( 4,8); c.lineTo( 1,-32); c.lineTo( 14,-6); c.closePath(); c.fill(); c.stroke();
+  // Screw
+  c.fillStyle='#64748b';
+  c.beginPath(); c.arc(0,8,4,0,Math.PI*2); c.fill();
+  c.restore();
+}
+
+/* ══════════════════════════════════════════
+   ACHIEVEMENTS
+══════════════════════════════════════════ */
+function updateAch() {
+  const map={first:'ach-first',perfect:'ach-perfect',combo3:'ach-combo',expert:'ach-expert'};
+  Object.keys(map).forEach(k=>{
+    if(S.achievements[k]) document.getElementById(map[k]).classList.add('earned');
+  });
+}
+
+/* ══════════════════════════════════════════
+   SCREEN SWITCHING
+══════════════════════════════════════════ */
+function showScreen(id) {
+  ['s-home','s-game','s-score'].forEach(s=>document.getElementById(s).classList.add('hidden'));
+  document.getElementById(id).classList.remove('hidden');
+}
+function goHome() {
+  stopTimer();
+  P6.running=false; if(P6.rafId){cancelAnimationFrame(P6.rafId);P6.rafId=null;}
+  showScreen('s-home');
+  updateAch();
+}
+
+/* init */
+updateAch();
+</script>
+</body>
+</html>

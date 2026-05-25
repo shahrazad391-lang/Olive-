@@ -31,20 +31,18 @@ html,body{
 }
 
 /* ─── IMAGE SPRITE ─── */
-/* o2.jpg: 3-col × 2-row composite panel */
 .panel{
   background:url('o2.jpg') no-repeat;
   background-size:300% 200%;
   width:100%; height:100%; position:absolute; inset:0;
 }
-.p-grove  {background-position:0%   0%  }   /* top-left  : olive grove    */
-.p-sapling{background-position:50%  0%  }   /* top-mid   : young sapling  */
-.p-citrus {background-position:100% 0%  }   /* top-right : citrus bush    */
-.p-shears1{background-position:0%   100%}   /* bot-left  : scissors 1     */
-.p-bloom  {background-position:50%  100%}   /* bot-mid   : bloom branch   */
-.p-shears2{background-position:100% 100%}   /* bot-right : scissors 2     */
+.p-grove  {background-position:0%   0%  }
+.p-sapling{background-position:50%  0%  }
+.p-citrus {background-position:100% 0%  }
+.p-shears1{background-position:0%   100%}
+.p-bloom  {background-position:50%  100%}
+.p-shears2{background-position:100% 100%}
 
-/* fallback gradient if image missing */
 .p-grove  {--fb:linear-gradient(135deg,#3a5a1a,#5a8a2a)}
 .p-citrus {--fb:linear-gradient(135deg,#5a3a10,#8a6020)}
 .p-sapling{--fb:linear-gradient(135deg,#1a3a10,#3a6a20)}
@@ -83,7 +81,6 @@ main{flex:1;max-width:460px;margin:0 auto;width:100%;padding:12px;display:flex;f
 .home-title{font-size:1.4rem;font-weight:900;color:var(--o200);text-align:center;line-height:1.3;margin-bottom:4px}
 .home-sub{font-size:.7rem;color:var(--o400);text-align:center;margin-bottom:14px}
 
-/* Difficulty pills */
 .diff-row{display:flex;gap:8px;margin-bottom:12px}
 .diff-btn{
   flex:1;padding:10px 6px;border-radius:12px;
@@ -95,7 +92,6 @@ main{flex:1;max-width:460px;margin:0 auto;width:100%;padding:12px;display:flex;f
 .diff-btn:hover{border-color:var(--o500);background:var(--o800)}
 .diff-icon{font-size:1.4rem;display:block;margin-bottom:2px}
 
-/* Variety select */
 .field-label{font-size:.65rem;font-weight:900;color:var(--o300);display:block;margin-bottom:5px}
 select.variety{
   width:100%;background:var(--o950);border:1px solid var(--o600)66;
@@ -106,7 +102,6 @@ select.variety{
   background-repeat:no-repeat;background-position:left 12px center;
 }
 
-/* Achievement strip */
 .ach-strip{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:4px}
 .ach-badge{
   background:var(--o800)88;border:1px solid var(--o600)55;
@@ -138,7 +133,6 @@ select.variety{
 .hud-val.score{color:var(--yellow)}
 .hud-val.combo{color:var(--emerald);font-size:.9rem}
 
-/* Timer ring */
 .timer-wrap{position:relative;width:52px;height:52px;margin:0 auto}
 .timer-svg{transform:rotate(-90deg);width:52px;height:52px}
 .timer-bg{fill:none;stroke:var(--o800);stroke-width:4}
@@ -149,16 +143,13 @@ select.variety{
   font-size:.9rem;font-weight:900;color:var(--white);
 }
 
-/* Hearts */
 .hearts{display:flex;gap:3px;justify-content:center}
 .heart{font-size:1rem;transition:transform .3s}
 .heart.lost{filter:grayscale(1) opacity(.3);transform:scale(.8)}
 
-/* Progress bar */
 .progress-outer{background:var(--o800);border-radius:4px;height:5px;overflow:hidden}
 .progress-inner{height:100%;border-radius:4px;background:linear-gradient(90deg,var(--o400),var(--emerald));transition:width .4s cubic-bezier(.4,0,.2,1)}
 
-/* Stage label */
 .stage-lbl{
   background:var(--o800)88;border:1px solid var(--o600)33;
   border-radius:12px;padding:8px 12px;text-align:center;
@@ -175,12 +166,10 @@ select.variety{
 .workspace.shake{animation:shake .4s ease-in-out}
 @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-7px) rotate(-.5deg)}75%{transform:translateX(7px) rotate(.5deg)}}
 
-/* Stage views */
 .sv{position:absolute;inset:0;display:none;animation:fadeIn .25s ease}
 .sv.active{display:block}
 @keyframes fadeIn{from{opacity:0;transform:scale(.97)}to{opacity:1;transform:scale(1)}}
 
-/* ── Stage 1 & 3: two-panel choice ── */
 .choice-grid{display:grid;grid-template-columns:1fr 1fr;height:100%;gap:5px;padding:5px}
 .choice-card{
   position:relative;border-radius:14px;overflow:hidden;
@@ -202,7 +191,6 @@ select.variety{
 .lbl-citrus{color:#fb923c}
 .lbl-blue{color:var(--sky)}
 
-/* ── Stage 2: Season choice (4 cards, no image) ── */
 .season-grid{
   display:grid;grid-template-columns:1fr 1fr;
   grid-template-rows:1fr 1fr;height:100%;gap:5px;padding:5px;
@@ -223,7 +211,6 @@ select.variety{
 .season-name{font-size:.7rem;color:var(--white)}
 .season-name-en{font-size:.5rem;color:var(--o300)}
 
-/* ── Stage 3: Tool choice (3 tools) ── */
 .tool-grid{display:flex;height:100%;gap:5px;padding:5px}
 .tool-card{
   flex:1;border-radius:14px;cursor:pointer;
@@ -241,7 +228,6 @@ select.variety{
   text-align:center;font-size:.65rem;font-weight:700;color:var(--o200);
 }
 
-/* ── Stage 4: Zone select (with image) ── */
 .zone-btn{
   position:absolute;border:2px dashed;border-radius:50%;
   cursor:pointer;display:flex;align-items:center;justify-content:center;
@@ -266,29 +252,6 @@ select.variety{
 .zone-tag.canopy{color:var(--sky)}
 .zone-tag.trunk{color:var(--red)}
 
-/* ── Stage 5: Moving precision target ── */
-.cut-info{
-  position:absolute;top:8px;left:8px;right:8px;
-  background:#000000cc;border-radius:8px;padding:5px 10px;
-  text-align:center;font-size:.6rem;font-weight:700;color:var(--o200);z-index:5;
-}
-.cut-target{
-  position:absolute;width:58px;height:58px;border-radius:50%;
-  cursor:pointer;display:flex;align-items:center;justify-content:center;
-  font-size:1.3rem;transition:transform .1s;z-index:4;
-  box-shadow:0 0 0 0 currentColor;
-}
-.cut-target:active{transform:scale(.85)!important}
-.cut-target.perfect{
-  border:4px solid var(--emerald);background:var(--emerald)33;
-  animation:pulseGreen 1.4s ease-in-out infinite;
-}
-.cut-target.wrong{
-  border:4px solid var(--red);background:var(--red)25;
-}
-@keyframes pulseGreen{0%,100%{box-shadow:0 0 0 0 #22c55e55}50%{box-shadow:0 0 0 12px transparent}}
-
-/* ── Floating feedback ── */
 .feedback-float{
   position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
   pointer-events:none;opacity:0;transition:opacity .2s;z-index:20;
@@ -296,21 +259,18 @@ select.variety{
 .feedback-float.show{opacity:1}
 .feedback-txt{font-size:2rem;font-weight:900;text-shadow:0 4px 16px #000000bb}
 
-/* Particles (CSS only) */
 .particle{
   position:absolute;pointer-events:none;font-size:.9rem;
   animation:rise 1s ease-out forwards;
 }
 @keyframes rise{from{transform:translateY(0);opacity:1}to{transform:translateY(-60px);opacity:0}}
 
-/* ─── LOG ─── */
 .log{
   background:#0a090588;border:1px solid var(--o800);
   border-radius:12px;padding:8px 12px;font-size:.6rem;
   height:52px;overflow-y:auto;font-family:monospace;color:var(--o300);line-height:1.7;
 }
 
-/* ─── BUTTONS ROW ─── */
 .btn-row{display:flex;gap:8px}
 .btn-sm{
   flex:1;padding:11px;border-radius:12px;border:none;
@@ -327,6 +287,7 @@ select.variety{
   border:2px solid var(--o600)44;border-radius:24px;
   padding:24px 18px;text-align:center;
   box-shadow:0 12px 48px #00000066;
+  position:relative;z-index:5;
 }
 .stars-row{display:flex;justify-content:center;gap:8px;margin:10px 0}
 .star{font-size:2.8rem;filter:grayscale(1) opacity(.3);transition:all .4s}
@@ -357,31 +318,36 @@ select.variety{
 }
 .btn-ghost:hover{background:var(--o700)88}
 
-/* ─── LIGHTBULB TIP ─── */
-.bulb-bar{
-  position:fixed;bottom:70px;right:12px;z-index:200;
-  display:flex;flex-direction:column;align-items:flex-end;gap:6px;
+/* ─── TRANSITION SLIDE ─── */
+.transition-overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,.9);display:none;
+  flex-direction:column;align-items:center;justify-content:center;
+  z-index:500;animation:fadeInOverlay .4s ease-out;
 }
-.bulb-btn{
-  width:44px;height:44px;border-radius:50%;
-  background:var(--o800);border:2px solid var(--o600)55;
-  font-size:1.4rem;display:flex;align-items:center;justify-content:center;
-  cursor:pointer;transition:all .3s;box-shadow:0 2px 12px #0004;
+.transition-overlay.show{display:flex}
+@keyframes fadeInOverlay{from{opacity:0}to{opacity:1}}
+.transition-content{
+  text-align:center;animation:scaleInContent .6s cubic-bezier(.34,.69,.69,1.1);
 }
-.bulb-btn.on{
-  background:#fbbf2422;border-color:#fbbf2488;
-  box-shadow:0 0 20px #fbbf2455, 0 2px 12px #0004;
-  animation:bulbGlow .6s ease-in-out infinite alternate;
+@keyframes scaleInContent{from{transform:scale(.6);opacity:0}to{transform:scale(1);opacity:1}}
+.transition-title{
+  font-size:1.8rem;font-weight:900;color:var(--emerald);margin-bottom:12px;
+  text-shadow:0 2px 12px rgba(34,197,94,.4);
 }
-@keyframes bulbGlow{from{box-shadow:0 0 10px #fbbf2433}to{box-shadow:0 0 28px #fbbf2488}}
-.tip-card{
-  max-width:220px;background:#1a1205ee;border:1px solid var(--o500)66;
-  border-radius:12px;padding:10px 12px;font-size:.65rem;line-height:1.6;
-  color:var(--o100);box-shadow:0 4px 20px #000a;
-  animation:tipSlide .4s ease-out;
+.transition-emoji{
+  font-size:4rem;margin-bottom:20px;animation:bounce 1.2s ease-in-out infinite;
 }
-@keyframes tipSlide{from{opacity:0;transform:translateX(20px)}to{opacity:1;transform:translateX(0)}}
-.tip-icon{font-size:1.1rem;margin-bottom:4px;display:block}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-20px)}}
+.transition-sub{
+  font-size:.85rem;color:var(--o200);margin-bottom:10px;font-weight:700;
+}
+
+/* ─── FLOWER CANVAS ─── */
+#flowerCanvas{
+  position:fixed;inset:0;pointer-events:none;z-index:2;
+  display:none;width:100%;height:100%;
+}
+#flowerCanvas.show{display:block}
 
 /* ─── HIDDEN ─── */
 .hidden{display:none!important}
@@ -453,7 +419,6 @@ select.variety{
     </select>
   </div>
 
-  <!-- Achievements strip -->
   <div class="card" id="ach-card">
     <div class="field-label lang-ar">🏅 إنجازاتك:</div>
     <div class="field-label lang-en hidden" dir="ltr">🏅 Your Achievements:</div>
@@ -472,13 +437,11 @@ select.variety{
 
 </section>
 
-
 <!-- ══════════════════════════════════
      SCREEN: GAMEPLAY
 ══════════════════════════════════ -->
 <section id="s-game" class="hidden">
 
-  <!-- HUD -->
   <div class="card" style="padding:10px 14px">
     <div class="hud">
       <div class="hud-block">
@@ -487,7 +450,6 @@ select.variety{
         <div class="hud-val score" id="hud-score">0</div>
         <div class="hud-val combo" id="hud-combo">×1</div>
       </div>
-      <!-- Timer ring -->
       <div>
         <div class="timer-wrap">
           <svg class="timer-svg" viewBox="0 0 44 44">
@@ -510,7 +472,6 @@ select.variety{
         <div style="font-size:.6rem;color:var(--o400)" id="hud-mult">×٢٫٠</div>
       </div>
     </div>
-    <!-- Progress -->
     <div style="margin-top:8px">
       <div style="display:flex;justify-content:space-between;font-size:.55rem;color:var(--o400);margin-bottom:3px">
         <span class="lang-ar" id="stage-lbl-ar">المرحلة ١ من ٥</span>
@@ -521,20 +482,15 @@ select.variety{
     </div>
   </div>
 
-  <!-- Bismillah -->
   <div style="text-align:center;font-size:.72rem;font-weight:900;
     color:var(--o300);letter-spacing:.5px;padding:3px 0;
     text-shadow:0 1px 6px #00000066;">
     🌿 قل بسم الله وابدأ التقليم 🌿
   </div>
 
-  <!-- Instructions -->
   <div class="stage-lbl" id="g-instr"></div>
 
-  <!-- Workspace -->
   <div class="workspace" id="workspace">
-
-    <!-- Stage 1: Tree ID (olive vs citrus) -->
     <div class="sv" id="sv1">
       <div class="choice-grid">
         <div class="choice-card" id="cc-citrus" onclick="stageAnswer(1,'citrus')">
@@ -548,7 +504,6 @@ select.variety{
       </div>
     </div>
 
-    <!-- Stage 2: Season -->
     <div class="sv" id="sv2">
       <div class="season-grid">
         <div class="season-card winter" onclick="stageAnswer(2,'winter')">
@@ -578,15 +533,11 @@ select.variety{
       </div>
     </div>
 
-    <!-- Stage 3: Tool -->
     <div class="sv" id="sv3" style="display:none">
-      <div class="tool-grid" id="tool-grid">
-        <!-- filled by JS to randomise order -->
-      </div>
+      <div class="tool-grid" id="tool-grid"></div>
       <div class="tool-task" id="tool-task"></div>
     </div>
 
-    <!-- Stage 4: Zone -->
     <div class="sv" id="sv4">
       <div class="panel p-sapling" style="position:absolute;inset:0"></div>
       <div class="zone-btn canopy" onclick="stageAnswer(4,'canopy')">
@@ -600,7 +551,6 @@ select.variety{
       </div>
     </div>
 
-    <!-- Stage 5: Pruning Simulation (olive-pruning mini-game) -->
     <div class="sv" id="sv5" style="position:relative;padding:0;overflow:hidden;background:#1a2810;border-radius:12px">
       <div id="sv5-ui" style="position:absolute;top:6px;left:6px;right:6px;display:flex;justify-content:space-between;z-index:10;pointer-events:none">
         <div style="background:rgba(0,0,0,.6);padding:3px 10px;border-radius:20px;font-size:.7rem;font-weight:800;color:#4CAF50">
@@ -616,23 +566,19 @@ select.variety{
       </div>
     </div>
 
-    <!-- Feedback overlay -->
     <div class="feedback-float" id="fb-overlay">
       <div class="feedback-txt" id="fb-txt"></div>
     </div>
   </div>
 
-  <!-- Log -->
   <div class="log" id="g-log">🌿 <span class="lang-ar">نظام تقليم الزيتون المتقدم — مستعد</span><span class="lang-en hidden">Advanced pruning system — ready</span></div>
 
-  <!-- Buttons -->
   <div class="btn-row">
     <button type="button" class="btn-sm btn-back"  onclick="goHome()">↩️ <span class="lang-ar">القائمة</span><span class="lang-en hidden">Menu</span></button>
     <button type="button" class="btn-sm btn-retry" onclick="retryStage()">🔄 <span class="lang-ar">إعادة المرحلة</span><span class="lang-en hidden">Retry Stage</span></button>
   </div>
 
 </section>
-
 
 <!-- ══════════════════════════════════
      SCREEN: SCORE
@@ -674,14 +620,19 @@ select.variety{
 
 </main>
 
-<!-- ═══ LIGHTBULB TIP WIDGET ═══ -->
-<div class="bulb-bar" id="bulb-bar">
-  <div class="tip-card hidden" id="tip-card">
-    <span class="tip-icon" id="tip-icon">💡</span>
-    <div id="tip-text"></div>
+<!-- ═══ TRANSITION OVERLAY ═══ -->
+<div class="transition-overlay" id="transitionOverlay">
+  <div class="transition-content">
+    <div class="transition-emoji">✂️</div>
+    <div class="transition-title lang-ar">المرحلة الجديدة</div>
+    <div class="transition-title hidden lang-en">New Stage</div>
+    <div class="transition-sub lang-ar">محاكاة التقليم الحقيقية</div>
+    <div class="transition-sub hidden lang-en">Real Pruning Simulation</div>
   </div>
-  <div class="bulb-btn" id="bulb-btn" onclick="toggleTip()">💡</div>
 </div>
+
+<!-- ═══ FLOWER CANVAS ═══ -->
+<canvas id="flowerCanvas"></canvas>
 
 <footer style="text-align:center;padding:8px;font-size:.5rem;color:var(--o600)88;border-top:1px solid var(--o800)44">
   محاكاة تقليم الزيتون المتقدمة © 2026 — Advanced Edition
@@ -714,7 +665,6 @@ const S = {
   stage5Score: 0,
 };
 
-/* Tool stage data */
 const TOOLS = [
   { id:'shears', icon:'✂️',  nameAr:'مقص التقليم',   nameEn:'Pruning Shears', correct:true  },
   { id:'saw',    icon:'🪚',  nameAr:'المنشار',        nameEn:'Hand Saw',       correct:false },
@@ -725,13 +675,90 @@ const TOOL_TASKS = {
   en:'Which tool do you use to cut thin basal suckers?',
 };
 
-/* Panel for stage 5 */
 const CUT_PANELS = ['p-shears1','p-bloom','p-shears2'];
 
 /* ══════════════════════════════════════════
-   AUDIO – disabled
+   AUDIO SYSTEM – Web Audio API
 ══════════════════════════════════════════ */
-function beep() {}  // sounds removed
+let audioCtx = null;
+function initAudio() {
+  if (!audioCtx) {
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  }
+  return audioCtx;
+}
+
+function playSnip() {
+  const ctx = initAudio();
+  if (ctx.state === 'suspended') ctx.resume();
+  const now = ctx.currentTime;
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+  osc.connect(gain);
+  gain.connect(ctx.destination);
+  osc.frequency.setValueAtTime(600, now);
+  osc.frequency.exponentialRampToValueAtTime(200, now + 0.15);
+  gain.gain.setValueAtTime(0.15, now);
+  gain.gain.exponentialRampToValueAtTime(0.01, now + 0.15);
+  osc.start(now);
+  osc.stop(now + 0.15);
+}
+
+function playCoin() {
+  const ctx = initAudio();
+  if (ctx.state === 'suspended') ctx.resume();
+  const now = ctx.currentTime;
+  for (let i = 0; i < 3; i++) {
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    const freq = 600 + i * 200;
+    osc.frequency.setValueAtTime(freq, now + i * 0.08);
+    gain.gain.setValueAtTime(0.1, now + i * 0.08);
+    gain.gain.exponentialRampToValueAtTime(0.01, now + i * 0.08 + 0.2);
+    osc.start(now + i * 0.08);
+    osc.stop(now + i * 0.08 + 0.2);
+  }
+}
+
+function playTryAgain() {
+  const ctx = initAudio();
+  if (ctx.state === 'suspended') ctx.resume();
+  const now = ctx.currentTime;
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+  osc.connect(gain);
+  gain.connect(ctx.destination);
+  osc.frequency.setValueAtTime(400, now);
+  osc.frequency.exponentialRampToValueAtTime(150, now + 0.4);
+  gain.gain.setValueAtTime(0.1, now);
+  gain.gain.exponentialRampToValueAtTime(0.01, now + 0.4);
+  osc.start(now);
+  osc.stop(now + 0.4);
+}
+
+function playTick() {
+  const ctx = initAudio();
+  if (ctx.state === 'suspended') ctx.resume();
+  const now = ctx.currentTime;
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+  osc.connect(gain);
+  gain.connect(ctx.destination);
+  osc.frequency.setValueAtTime(1000, now);
+  gain.gain.setValueAtTime(0.05, now);
+  gain.gain.exponentialRampToValueAtTime(0.001, now + 0.1);
+  osc.start(now);
+  osc.stop(now + 0.1);
+}
+
+function beep(type) {
+  if (type === 'correct') playCoin();
+  else if (type === 'wrong') playTryAgain();
+  else if (type === 'tick') playTick();
+  else if (type === 'snip') playSnip();
+}
 
 /* ══════════════════════════════════════════
    LANGUAGE
@@ -762,7 +789,6 @@ function updateVariety() {
   const sel = document.getElementById('varietySel');
   S.variety = sel.value;
   S.multiplier = parseFloat(sel.options[sel.selectedIndex].getAttribute('data-m'));
-  // Short name
   const txt = sel.options[sel.selectedIndex].text.split('—')[0].replace(/\(.*\)/,'').trim();
   document.getElementById('hud-var').textContent = txt;
   document.getElementById('hud-mult').textContent = '×' + S.multiplier.toFixed(1);
@@ -778,14 +804,12 @@ function startGame() {
   showScreen('s-game');
   renderHearts();
   setupStage(1);
-  // Unlock first-game achievement
   if (!S.achievements.first) { S.achievements.first=true; updateAch(); }
 }
 
 function setupStage(n) {
   S.stage=n;
   stopTimer();
-  // hide all stage views
   for(let i=1;i<=5;i++) { const v=document.getElementById('sv'+i); if(v){v.classList.remove('active'); v.style.display='none';} }
 
   const prog = Math.round(((n-1)/S.totalStages)*100);
@@ -794,9 +818,11 @@ function setupStage(n) {
   document.getElementById('stage-lbl-ar').textContent = `المرحلة ${n} من ${S.totalStages}`;
   document.getElementById('stage-lbl-en').textContent = `Stage ${n} of ${S.totalStages}`;
 
-  // Stage-specific setup
   if (n===3) buildToolStage();
-  if (n===5) buildPruningStage();
+  if (n===5) {
+    showTransition();
+    return; // delayed start via transition
+  }
 
   const sv = document.getElementById('sv'+n);
   if(sv){ sv.style.display='block'; sv.classList.add('active'); }
@@ -806,12 +832,25 @@ function setupStage(n) {
   startTimer();
 }
 
+function showTransition() {
+  const overlay = document.getElementById('transitionOverlay');
+  overlay.classList.add('show');
+  setTimeout(()=>{
+    overlay.classList.remove('show');
+    const sv = document.getElementById('sv5');
+    if(sv){ sv.style.display='block'; sv.classList.add('active'); }
+    setInstruction(5);
+    updateScoreHUD();
+    S.stageStartTime = Date.now();
+    startTimer();
+  }, 3000);
+}
+
 function buildToolStage() {
   const grid = document.getElementById('tool-grid');
   grid.innerHTML='';
   const task = document.getElementById('tool-task');
   task.textContent = S.lang==='ar'? TOOL_TASKS.ar : TOOL_TASKS.en;
-  // Shuffle tools
   const shuffled = [...TOOLS].sort(()=>Math.random()-.5);
   shuffled.forEach(t => {
     const d=document.createElement('div');
@@ -823,26 +862,6 @@ function buildToolStage() {
     `;
     grid.appendChild(d);
   });
-}
-
-function buildCutStage() {
-  const sv=document.getElementById('sv5');
-  // set random panel
-  const panel = CUT_PANELS[Math.floor(Math.random()*CUT_PANELS.length)];
-  // remove any existing panel div
-  sv.querySelectorAll('.panel').forEach(el=>el.remove());
-  const pdiv=document.createElement('div');
-  pdiv.className='panel '+panel;
-  pdiv.style.cssText='position:absolute;inset:0;z-index:0';
-  sv.insertBefore(pdiv, sv.firstChild);
-  // randomise good target position
-  const positions=[
-    {top:'48%',left:'46%'},{top:'55%',left:'52%'},{top:'42%',left:'40%'}
-  ];
-  const pos=positions[Math.floor(Math.random()*positions.length)];
-  const good=document.getElementById('cut-good');
-  good.style.top=pos.top; good.style.left=pos.left;
-  good.style.transform='translate(-50%,-50%)';
 }
 
 function setInstruction(n) {
@@ -867,12 +886,11 @@ function setInstruction(n) {
 /* ══════════════════════════════════════════
    ANSWERS
 ══════════════════════════════════════════ */
-/* correctness key per stage */
 const CORRECT = { 1:'olive', 2:'winter', 3:'correct', 4:'basal', 5:'pruned' };
-const PARTIAL  = { 2:'spring', 4:'canopy' }; // partial credit
+const PARTIAL  = { 2:'spring', 4:'canopy' };
 
 function stageAnswer(stageNum, answer) {
-  if (S.stage !== stageNum) return; // guard
+  if (S.stage !== stageNum) return;
   stopTimer();
   const elapsed = (Date.now()-S.stageStartTime)/1000;
   S.stageTimes.push(elapsed);
@@ -966,12 +984,11 @@ function stopTimer() {
 }
 function updateTimerUI(v) {
   const max=S.timerMax[S.diff];
-  const pct=v/max; // 1→0
-  const circ=113; // 2πr for r=18
+  const pct=v/max;
+  const circ=113;
   const offset=circ*(1-pct);
   document.getElementById('timer-ring').style.strokeDashoffset=offset;
   document.getElementById('timer-num').textContent=v;
-  // Color shift
   const color=v>max*.5?'var(--emerald)':v>max*.25?'var(--yellow)':'var(--red)';
   document.getElementById('timer-ring').style.stroke=color;
   document.getElementById('timer-num').style.color=color;
@@ -999,577 +1016,145 @@ function flash(msg, color) {
 function shakeWs() {
   const ws=document.getElementById('workspace');
   ws.classList.add('shake');
-  setTimeout(()=>ws.classList.remove('shake'),500);
+  setTimeout(()=>ws.classList.remove('shake'),400);
 }
-function spawnParticles(icons) {
+function spawnParticles(emojis) {
   const ws=document.getElementById('workspace');
-  for(let i=0;i<6;i++){
+  for(let i=0;i<5;i++){
     const p=document.createElement('div');
     p.className='particle';
-    p.style.left=Math.random()*80+10+'%';
-    p.style.top=Math.random()*40+20+'%';
-    p.style.animationDelay=Math.random()*.4+'s';
-    p.textContent=icons[Math.floor(Math.random()*icons.length)];
+    p.textContent=emojis[Math.floor(Math.random()*emojis.length)];
+    p.style.left=Math.random()*100+'%';
+    p.style.top='50%';
     ws.appendChild(p);
-    setTimeout(()=>p.remove(),1200);
+    setTimeout(()=>p.remove(),1100);
   }
 }
-function log(txt) {
-  const box=document.getElementById('g-log');
-  box.innerHTML='<div>🌿 '+txt+'</div>'+box.innerHTML;
+function log(msg) {
+  const logEl = document.getElementById('g-log');
+  logEl.textContent = msg + '\n' + logEl.textContent;
 }
-function retryStage() {
-  stopTimer();
-  P5.running=false; if(P5.rafId){cancelAnimationFrame(P5.rafId);P5.rafId=null;}
-  if (S.stage===3) buildToolStage();
-  if (S.stage===5) buildPruningStage();
-  setInstruction(S.stage);
-  S.stageStartTime=Date.now();
-  startTimer();
-}
-
-/* ══════════════════════════════════════════
-   END GAME
-══════════════════════════════════════════ */
-function endGame() {
-  stopTimer();
-  P5.running=false; if(P5.rafId){cancelAnimationFrame(P5.rafId);P5.rafId=null;}
-  showScreen('s-score');
-  document.getElementById('final-score').textContent=S.score;
-
-  // Stars – require completing stage 5 (pruning) with a good score
-  let starsNeeded = 0;
-  if (!S.stage5Completed || S.lives <= 0) {
-    starsNeeded = 0;
-  } else if (S.correctCount >= S.totalStages && S.score >= Math.round(500 * S.multiplier)) {
-    starsNeeded = 3;
-  } else if (S.correctCount >= S.totalStages - 1 && S.score >= Math.round(250 * S.multiplier)) {
-    starsNeeded = 2;
-  } else if (S.stage5Completed) {
-    starsNeeded = 1;
-  }
-  ['star1','star2','star3'].forEach((id,i)=>{
-    const el=document.getElementById(id);
-    el.classList.remove('lit');
-    if(i<starsNeeded) setTimeout(()=>el.classList.add('lit'),(i+1)*400);
-  });
-  if(starsNeeded===3&&!S.achievements.expert){ S.achievements.expert=true; updateAch(); }
-
-  // Performance text
-  const avgTime = S.stageTimes.length? (S.stageTimes.reduce((a,b)=>a+b,0)/S.stageTimes.length).toFixed(1) : '—';
-  const perf=[
-    { thr:400*S.multiplier, ar:'🏆 خبير زراعي مُعتمد! أداء استثنائي.', en:'🏆 Certified Agriculture Expert! Outstanding.' },
-    { thr:250*S.multiplier, ar:'🌟 مستوى متقدم ممتاز، أنت على الطريق الصحيح!', en:'🌟 Advanced level — you are on the right track!' },
-    { thr:100*S.multiplier, ar:'👍 مستوى جيد. استمر في التدريب لتتحسن!', en:'👍 Good level. Keep practicing to improve!' },
-    { thr:0,                ar:'📚 تحتاج مزيداً من التدريب. لا تستسلم!', en:'📚 More practice needed. Do not give up!' },
-  ];
-  const p=perf.find(x=>S.score>=x.thr);
-  document.getElementById('perf-text').innerHTML = S.lang==='ar'? p.ar : p.en;
-
-  // Stats
-  document.getElementById('st-correct').textContent  = S.correctCount+'/'+S.totalStages;
-  document.getElementById('st-maxcombo').textContent  = '×'+S.maxCombo;
-  document.getElementById('st-time').textContent      = avgTime+'s';
-}
-
-/* ══════════════════════════════════════════
-   GEMINI API KEY – ضع مفتاحك في السطر التالي
-══════════════════════════════════════════ */
-const GEMINI_API_KEY = 'YOUR_GEMINI_API_KEY_HERE'; // ← ضع مفتاحك هنا
-
-/* ══════════════════════════════════════════
-   STAGE 5 – PRUNING SIMULATION (olive-pruning)
-══════════════════════════════════════════ */
-const P5_VARIETIES = [
-  { name:'K18',        nameAr:'K18',       baseValue:100, color:'#2E5A1c' },
-  { name:'Arbequina',  nameAr:'أربيكانا',  baseValue:85,  color:'#3B6E26' },
-  { name:'Kalamata',   nameAr:'كلمتا',     baseValue:75,  color:'#488231' },
-  { name:'Manzanilla', nameAr:'منزرينا',   baseValue:65,  color:'#55963B' },
-  { name:'Jlot',       nameAr:'جلط',       baseValue:55,  color:'#62AA46' },
-  { name:'Qaisi',      nameAr:'قيسي',      baseValue:45,  color:'#6FBE50' },
-  { name:'Nabali',     nameAr:'نابالي',    baseValue:35,  color:'#7CD25B' },
-  { name:'Istanbuli',  nameAr:'استنبولي',  baseValue:20,  color:'#89E666' },
-];
-
-let P5 = {
-  canvas:null, ctx:null, rafId:null, running:false,
-  branches:[], scoreFeedbacks:[],
-  mx:200, my:200, isCutting:false,
-  varIdx:0, p5score:0,
-  cutPoint:{ x:0, y:0 }, // exact touch/click point
-};
-
-/* ── background olive tree silhouettes ── */
-function p5DrawBgTrees(ctx, W, H) {
-  const trees=[{x:W*.08,s:.45},{x:W*.92,s:.4},{x:W*.72,s:.35},{x:W*.22,s:.3}];
-  trees.forEach(t=>{
-    ctx.save(); ctx.globalAlpha=.18;
-    ctx.translate(t.x,H);
-    ctx.scale(t.s,t.s);
-    // trunk
-    ctx.strokeStyle='#4a3010'; ctx.lineWidth=14; ctx.lineCap='round';
-    ctx.beginPath(); ctx.moveTo(0,0); ctx.lineTo(0,-200); ctx.stroke();
-    // canopy
-    ctx.fillStyle='#3a6020';
-    for(let i=0;i<7;i++){
-      const ang=(-Math.PI*.5)+(i-3)*.3;
-      const r=70+Math.random()*20;
-      ctx.beginPath();
-      ctx.arc(Math.cos(ang)*40,-(180+Math.sin(ang)*30),r*.6,0,Math.PI*2);
-      ctx.fill();
-    }
-    ctx.restore();
-  });
-}
-
-function p5GenTree(W,H) {
-  P5.branches=[];
-  const variety=P5_VARIETIES[P5.varIdx];
-  document.getElementById('p5-tree').textContent=
-    S.lang==='ar'? variety.nameAr : variety.name;
-
-  function branch(x,y,angle,len,depth,isNew){
-    if(depth>5||len<8) return;
-    const ex=x+Math.cos(angle)*len;
-    const ey=y+Math.sin(angle)*len;
-    const hf=(H-ey)/H;
-    const vertical=Math.abs(Math.sin(angle))>0.8;
-    const af=vertical?1.0:1.5;
-    const gtype=(isNew||depth>=3)?'new':'old';
-    P5.branches.push({
-      sx:x,sy:y,ex,ey,depth,growthType:gtype,
-      angleFactor:af,heightFactor:hf,pruned:false,
-      // midpoint for hit detection
-      mx:(x+ex)/2, my:(y+ey)/2,
-      // branch thickness for hit area
-      hw:Math.max(16, 22-depth*2.5)
-    });
-    const nb=2+Math.floor(Math.random()*2);
-    for(let i=0;i<nb;i++){
-      const na=angle+(Math.random()*.9-.45);
-      const nl=len*(.68+Math.random()*.22);
-      branch(ex,ey,na,nl,depth+1,gtype==='new');
-    }
-  }
-  branch(W*.5,H,-Math.PI/2,W*.14,1,false);
-}
-
-function p5HitBranch(cx,cy) {
-  // Check each branch — is the touch point near the branch line?
-  let hit=null, bestD=Infinity;
-  P5.branches.forEach(b=>{
-    if(b.pruned) return;
-    // Point-to-segment distance
-    const dx=b.ex-b.sx, dy=b.ey-b.sy;
-    const len2=dx*dx+dy*dy;
-    let t=len2>0?((cx-b.sx)*dx+(cy-b.sy)*dy)/len2:0;
-    t=Math.max(0,Math.min(1,t));
-    const nx=b.sx+t*dx, ny=b.sy+t*dy;
-    const d=Math.hypot(cx-nx,cy-ny);
-    const hitRadius=b.hw+10; // generous touch area
-    if(d<hitRadius && d<bestD){ bestD=d; hit=b; }
-  });
-  return hit;
-}
-
-function p5Prune(cx,cy) {
-  const b=p5HitBranch(cx,cy);
-  if(!b) return;
-  b.pruned=true;
-  P5.isCutting=true;
-  setTimeout(()=>P5.isCutting=false,120);
-
-  const variety=P5_VARIETIES[P5.varIdx];
-  const gm=b.growthType==='new'?1.5:1.0;
-  const hm=1+b.heightFactor;
-  const am=b.angleFactor;
-  const pts=Math.round(variety.baseValue*gm*hm*am);
-  P5.p5score+=pts;
-  S.score+=pts; updateScoreHUD();
-  document.getElementById('p5-score').textContent=P5.p5score;
-  P5.scoreFeedbacks.push({
-    x:cx, y:cy,
-    text:'+'+pts,
-    alpha:1.0,
-    color:b.growthType==='new'?'#8BC34A':'#FFC107'
-  });
-  // Also prune child branches (branches whose start = pruned branch end)
-  P5.branches.forEach(child=>{
-    if(!child.pruned&&Math.hypot(child.sx-b.ex,child.sy-b.ey)<4){
-      child.pruned=true;
-    }
-  });
-  // Regenerate tree if >70% branches pruned
-  const remaining=P5.branches.filter(x=>!x.pruned).length;
-  if(remaining<P5.branches.length*.3){
-    P5.varIdx=(P5.varIdx+1)%P5_VARIETIES.length;
-    const cv=P5.canvas; p5GenTree(cv.width,cv.height);
-  }
-}
-
-function buildPruningStage() {
-  P5.running=false;
-  if(P5.rafId){cancelAnimationFrame(P5.rafId);P5.rafId=null;}
-  P5.p5score=0; P5.branches=[]; P5.scoreFeedbacks=[];
-  P5.varIdx=0; P5.isCutting=false;
-  document.getElementById('p5-score').textContent='0';
-
-  P5.canvas=document.getElementById('sv5-canvas');
-  P5.ctx=P5.canvas.getContext('2d');
-
-  requestAnimationFrame(()=>requestAnimationFrame(()=>{
-    const ws=document.getElementById('workspace');
-    const r=ws.getBoundingClientRect();
-    const W=Math.round(r.width)||360;
-    const H=Math.round(r.height)||270;
-    P5.canvas.width=W;
-    P5.canvas.height=H;
-    P5.mx=W/2; P5.my=H*.8;
-    p5GenTree(W,H);
-
-    // Mouse events
-    P5.canvas.onmousemove=e=>{
-      const rc=P5.canvas.getBoundingClientRect();
-      const sx=P5.canvas.width/rc.width;
-      const sy=P5.canvas.height/rc.height;
-      P5.mx=(e.clientX-rc.left)*sx;
-      P5.my=(e.clientY-rc.top)*sy;
-    };
-    P5.canvas.onmousedown=e=>{
-      e.preventDefault();
-      const rc=P5.canvas.getBoundingClientRect();
-      const sx=P5.canvas.width/rc.width;
-      const sy=P5.canvas.height/rc.height;
-      const cx=(e.clientX-rc.left)*sx;
-      const cy=(e.clientY-rc.top)*sy;
-      P5.mx=cx; P5.my=cy;
-      p5Prune(cx,cy);
-    };
-    // Touch events – full Android support
-    P5.canvas.ontouchmove=e=>{
-      e.preventDefault();
-      const rc=P5.canvas.getBoundingClientRect();
-      const sx=P5.canvas.width/rc.width;
-      const sy=P5.canvas.height/rc.height;
-      const t=e.touches[0];
-      P5.mx=(t.clientX-rc.left)*sx;
-      P5.my=(t.clientY-rc.top)*sy;
-      // Continuous pruning while dragging finger
-      p5Prune(P5.mx,P5.my);
-    };
-    P5.canvas.ontouchstart=e=>{
-      e.preventDefault();
-      const rc=P5.canvas.getBoundingClientRect();
-      const sx=P5.canvas.width/rc.width;
-      const sy=P5.canvas.height/rc.height;
-      const t=e.touches[0];
-      P5.mx=(t.clientX-rc.left)*sx;
-      P5.my=(t.clientY-rc.top)*sy;
-      p5Prune(P5.mx,P5.my);
-    };
-    P5.canvas.ontouchend=e=>{ e.preventDefault(); };
-    P5.canvas.style.touchAction='none';
-
-    P5.running=true;
-    p5Loop();
-  }));
-}
-
-function p5DrawHand(ctx,x,y,cutting) {
-  ctx.save();
-  ctx.translate(x,y);
-  ctx.rotate(Math.PI/5);
-  const sc=cutting?.92:1;
-  ctx.scale(sc,sc);
-
-  // Sleeve
-  ctx.fillStyle='#3b2a1a';
-  ctx.beginPath();
-  ctx.roundRect(-14,18,28,55,5);
-  ctx.fill();
-
-  // Palm
-  ctx.fillStyle='#c8845a';
-  ctx.beginPath();
-  ctx.ellipse(0,12,18,22,0,0,Math.PI*2);
-  ctx.fill();
-
-  // 4 fingers curled around handle
-  [-10,-4,4,10].forEach((fx,i)=>{
-    ctx.fillStyle=i%2===0?'#c8845a':'#d99060';
-    ctx.beginPath();
-    ctx.ellipse(fx,0,6,10,0,0,Math.PI*2);
-    ctx.fill();
-  });
-  // Thumb
-  ctx.fillStyle='#c8845a';
-  ctx.beginPath();
-  ctx.ellipse(-20,8,7,12,-Math.PI/4,0,Math.PI*2);
-  ctx.fill();
-
-  // ── SHEARS ──
-  const sa=cutting?0.08:0.38;
-  // blade 1 (top)
-  ctx.save(); ctx.rotate(-sa);
-  ctx.strokeStyle='#9e9e9e'; ctx.lineWidth=7; ctx.lineCap='round';
-  ctx.beginPath(); ctx.moveTo(0,0); ctx.lineTo(-28,-18); ctx.stroke();
-  // blade highlight
-  ctx.strokeStyle='#e0e0e0'; ctx.lineWidth=2;
-  ctx.beginPath(); ctx.moveTo(0,0); ctx.lineTo(-26,-16); ctx.stroke();
-  // handle
-  ctx.strokeStyle='#d32f2f'; ctx.lineWidth=9;
-  ctx.beginPath(); ctx.moveTo(0,0); ctx.lineTo(26,18); ctx.stroke();
-  ctx.restore();
-
-  // blade 2 (bottom)
-  ctx.save(); ctx.rotate(sa);
-  ctx.strokeStyle='#757575'; ctx.lineWidth=7; ctx.lineCap='round';
-  ctx.beginPath(); ctx.moveTo(0,0); ctx.lineTo(-32,-6); ctx.stroke();
-  ctx.strokeStyle='#bdbdbd'; ctx.lineWidth=2;
-  ctx.beginPath(); ctx.moveTo(0,0); ctx.lineTo(-30,-5); ctx.stroke();
-  ctx.strokeStyle='#d32f2f'; ctx.lineWidth=9;
-  ctx.beginPath(); ctx.moveTo(0,0); ctx.lineTo(22,26); ctx.stroke();
-  ctx.restore();
-
-  // Pivot screw
-  ctx.fillStyle='#424242';
-  ctx.beginPath(); ctx.arc(0,0,5,0,Math.PI*2); ctx.fill();
-  ctx.fillStyle='#757575';
-  ctx.beginPath(); ctx.arc(0,0,2.5,0,Math.PI*2); ctx.fill();
-
-  ctx.restore();
-}
-
-function p5Draw() {
-  const cv=P5.canvas, c=P5.ctx, W=cv.width, H=cv.height;
-  // Sky gradient
-  const sky=c.createLinearGradient(0,0,0,H);
-  sky.addColorStop(0,'#87CEEB'); sky.addColorStop(1,'#d4f0c0');
-  c.fillStyle=sky; c.fillRect(0,0,W,H);
-
-  // Background trees
-  p5DrawBgTrees(c,W,H);
-
-  // Ground
-  c.fillStyle='#6B4226';
-  c.beginPath(); c.roundRect(0,H-28,W,28,0); c.fill();
-  // Grass strip
-  c.fillStyle='#4a7c20';
-  c.beginPath(); c.roundRect(0,H-32,W,10,0); c.fill();
-
-  // Main trunk
-  c.strokeStyle='#5d4037'; c.lineWidth=20; c.lineCap='round';
-  c.beginPath(); c.moveTo(W*.5,H-28); c.lineTo(W*.5,H*.55); c.stroke();
-  // Trunk texture
-  c.strokeStyle='#4a3020'; c.lineWidth=3;
-  for(let i=0;i<3;i++){
-    const ty=H*.65+i*18;
-    c.beginPath();
-    c.moveTo(W*.5-6,ty); c.quadraticCurveTo(W*.5+3,ty+6,W*.5+6,ty+2);
-    c.stroke();
-  }
-
-  // Branches
-  P5.branches.forEach(b=>{
-    if(b.pruned) return;
-    c.strokeStyle=b.growthType==='new'?'#66BB6A':'#8d6e63';
-    c.lineWidth=Math.max(2,10-b.depth*1.5);
-    c.lineCap='round';
-    c.beginPath(); c.moveTo(b.sx,b.sy); c.lineTo(b.ex,b.ey); c.stroke();
-    // Leaf dots on new growth
-    if(b.growthType==='new'){
-      c.fillStyle=P5_VARIETIES[P5.varIdx].color;
-      c.beginPath(); c.arc(b.ex,b.ey,4,0,Math.PI*2); c.fill();
-      // tiny leaves
-      c.fillStyle='#5a9030';
-      [-1,1].forEach(side=>{
-        c.save();
-        c.translate(b.mx,b.my);
-        const ang=Math.atan2(b.ey-b.sy,b.ex-b.sx)+Math.PI/2*side;
-        c.rotate(ang);
-        c.beginPath(); c.ellipse(0,0,3,7,0,0,Math.PI*2); c.fill();
-        c.restore();
-      });
-    }
-  });
-
-  // Score feedbacks
-  for(let i=P5.scoreFeedbacks.length-1;i>=0;i--){
-    const f=P5.scoreFeedbacks[i];
-    c.fillStyle=f.color;
-    c.font=`bold ${18+(1-f.alpha)*8}px Cairo`;
-    c.globalAlpha=f.alpha;
-    c.fillText(f.text,f.x,f.y);
-    f.y-=1.2; f.alpha-=0.018;
-    if(f.alpha<=0) P5.scoreFeedbacks.splice(i,1);
-  }
-  c.globalAlpha=1.0;
-
-  // Draw hand+shears following touch/mouse
-  p5DrawHand(c,P5.mx,P5.my,P5.isCutting);
-}
-
-function p5Loop() {
-  if(!P5.running) return;
-  p5Draw();
-  P5.rafId=requestAnimationFrame(p5Loop);
-}
-
-/* Timer ends stage 5 automatically — evaluate score */
-const _origStartTimer = startTimer;
-startTimer = function() {
-  S.timerVal = S.timerMax[S.diff];
-  updateTimerUI(S.timerVal);
-  S.timerInterval = setInterval(()=>{
-    S.timerVal--;
-    updateTimerUI(S.timerVal);
-    if(S.timerVal<=0){
-      stopTimer();
-      if(S.stage===5){
-        // End pruning stage — score threshold for "correct"
-        const threshold=P5_VARIETIES[P5.varIdx].baseValue*2;
-        if(P5.p5score>=threshold){
-          handleCorrect(5,true);
-        } else {
-          handleWrong(5);
-        }
-      } else {
-        handleWrong(S.stage);
-      }
-    }
-  },1000);
-};
-
-/* ══════════════════════════════════════════
-   LIGHTBULB TIP SYSTEM
-══════════════════════════════════════════ */
-const OLIVE_TIPS_AR=[
-  { icon:'🌱', text:'أفضل وقت لتقليم الزيتون هو آخر الشتاء قبل بدء النمو الربيعي.' },
-  { icon:'✂️', text:'استخدم مقص التقليم الحاد لقطع الأغصان الرفيعة بضربة واحدة نظيفة.' },
-  { icon:'🌿', text:'الأغصان الخضراء الجديدة (النمو الحديث) تعطي أعلى إنتاجية عند التقليم الصحيح.' },
-  { icon:'💧', text:'ري شجرة الزيتون يكون كل 15-20 يوماً في الصيف وكل 30-45 يوماً في الشتاء.' },
-  { icon:'🌳', text:'صنف K18 هو الأعلى قيمة اقتصادياً بسبب نسبة الزيت المرتفعة.' },
-  { icon:'🧪', text:'السماد الأمثل للزيتون: نيتروجين في الربيع، بوتاسيوم في الخريف.' },
-  { icon:'🌞', text:'شجرة الزيتون تحتاج 6 ساعات شمس يومياً على الأقل لإنتاج مثالي.' },
-  { icon:'🪵', text:'الخشب العتيق (البني) يحتاج تقليماً أقل — ركّز على الأغصان الرفيعة الجديدة.' },
-  { icon:'🍃', text:'التقليم الزائد يضعف الشجرة — لا تقطع أكثر من ثلث الكتلة الخضراء.' },
-  { icon:'🌺', text:'صنف أربيكانا مشهور بزيته الخفيف ونضجه المبكر ومقاومته للبرد.' },
-  { icon:'⭐', text:'الأغصان المائلة جانباً تُنتج أفضل من الأغصان العمودية — اتركها وقص العمودية.' },
-  { icon:'🔬', text:'كلما ارتفعت الغصن على الشجرة، زادت جودة الزيت المُنتج.' },
-];
-const OLIVE_TIPS_EN=[
-  { icon:'🌱', text:'Best time to prune olive trees is late winter, before spring growth begins.' },
-  { icon:'✂️', text:'Use sharp pruning shears for thin branches — one clean cut prevents disease.' },
-  { icon:'🌿', text:'New green shoots (new growth) give highest productivity when pruned correctly.' },
-  { icon:'💧', text:'Water olive trees every 15-20 days in summer, 30-45 days in winter.' },
-  { icon:'🌳', text:'K18 variety has the highest economic value due to elevated oil content.' },
-  { icon:'🧪', text:'Best fertilizer: nitrogen in spring, potassium in autumn for olive trees.' },
-  { icon:'🌞', text:'Olive trees need at least 6 hours of direct sunlight daily for optimal yield.' },
-  { icon:'🪵', text:'Old brown wood needs less pruning — focus on thin new green branches.' },
-  { icon:'🍃', text:'Over-pruning weakens the tree — never cut more than 1/3 of green mass.' },
-  { icon:'🌺', text:'Arbequina is prized for mild oil, early ripening, and cold resistance.' },
-  { icon:'⭐', text:'Side-angled branches produce better than vertical ones — keep them.' },
-  { icon:'🔬', text:'The higher the branch on the tree, the better the quality of oil produced.' },
-];
-
-let bulbState={on:false,tipVisible:false,tipIdx:0,autoInterval:null};
-
-async function fetchGeminiTip() {
-  if(!GEMINI_API_KEY||GEMINI_API_KEY==='YOUR_GEMINI_API_KEY_HERE') return null;
-  try{
-    const prompt=`اعطني معلومة مفيدة واحدة قصيرة جداً (جملة أو جملتان) عن شجرة الزيتون أو تقليمها أو تسميدها أو أصنافها. بالعربي فقط. بدون مقدمة.`;
-    const res=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`,{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({contents:[{parts:[{text:prompt}]}]})
-    });
-    const data=await res.json();
-    return data?.candidates?.[0]?.content?.parts?.[0]?.text||null;
-  }catch(e){return null;}
-}
-
-function showTip(text,icon) {
-  const card=document.getElementById('tip-card');
-  document.getElementById('tip-text').textContent=text;
-  document.getElementById('tip-icon').textContent=icon;
-  card.classList.remove('hidden');
-  bulbState.tipVisible=true;
-  setTimeout(()=>{
-    card.classList.add('hidden');
-    bulbState.tipVisible=false;
-    document.getElementById('bulb-btn').textContent='💡';
-    document.getElementById('bulb-btn').classList.remove('on');
-    bulbState.on=false;
-  },5000);
-}
-
-function toggleTip() {
-  if(bulbState.tipVisible){
-    document.getElementById('tip-card').classList.add('hidden');
-    bulbState.tipVisible=false;
-    return;
-  }
-  bulbState.on=true;
-  document.getElementById('bulb-btn').classList.add('on');
-  document.getElementById('bulb-btn').textContent='💡';
-  const tips=S.lang==='ar'?OLIVE_TIPS_AR:OLIVE_TIPS_EN;
-  bulbState.tipIdx=(bulbState.tipIdx+1)%tips.length;
-  const tip=tips[bulbState.tipIdx];
-  showTip(tip.text,tip.icon);
-}
-
-function startBulbCycle() {
-  clearInterval(bulbState.autoInterval);
-  bulbState.autoInterval=setInterval(async()=>{
-    // Flash bulb for 3 seconds
-    document.getElementById('bulb-btn').classList.add('on');
-    document.getElementById('bulb-btn').textContent='💡';
-    await new Promise(r=>setTimeout(r,3000));
-    if(bulbState.tipVisible) return;
-    // Try Gemini first, fall back to local tips
-    let text=null, icon='💡';
-    const geminiText=await fetchGeminiTip();
-    if(geminiText){
-      text=geminiText;
-    } else {
-      const tips=S.lang==='ar'?OLIVE_TIPS_AR:OLIVE_TIPS_EN;
-      bulbState.tipIdx=(bulbState.tipIdx+1)%tips.length;
-      const tip=tips[bulbState.tipIdx];
-      text=tip.text; icon=tip.icon;
-    }
-    showTip(text,icon);
-  },6000); // every 6s: 3s flash then show tip
-}
-
-// Start bulb cycle on page load
-startBulbCycle();
-
-/* ══════════════════════════════════════════
-   ACHIEVEMENTS
-══════════════════════════════════════════ */
-function updateAch() {
-  const map={first:'ach-first',perfect:'ach-perfect',combo3:'ach-combo',expert:'ach-expert'};
-  Object.keys(map).forEach(k=>{
-    if(S.achievements[k]) document.getElementById(map[k]).classList.add('earned');
-  });
-}
-
-/* ══════════════════════════════════════════
-   SCREEN SWITCHING
-══════════════════════════════════════════ */
 function showScreen(id) {
-  ['s-home','s-game','s-score'].forEach(s=>document.getElementById(s).classList.add('hidden'));
+  document.querySelectorAll('section').forEach(s=>s.classList.add('hidden'));
   document.getElementById(id).classList.remove('hidden');
 }
-function goHome() {
-  stopTimer();
-  P5.running=false; if(P5.rafId){cancelAnimationFrame(P5.rafId);P5.rafId=null;}
-  showScreen('s-home');
-  updateAch();
+
+function updateAch() {
+  ['first','perfect','combo3'].forEach(k=>{
+    if(S.achievements[k]){
+      const map={'first':'ach-first','perfect':'ach-perfect','combo3':'ach-combo'};
+      const el=document.getElementById(map[k]);
+      if(el) el.classList.add('earned');
+    }
+  });
 }
 
-/* init */
-updateAch();
+function endGame() {
+  stopTimer();
+  let stars = 0;
+  if (S.score >= 200) stars = 3;
+  else if (S.score >= 100) stars = 2;
+  else if (S.score >= 50) stars = 1;
+  
+  if (stars === 3 && !S.achievements.expert) {
+    S.achievements.expert = true;
+    updateAch();
+  }
+
+  [1,2,3].forEach(i=>{
+    const el = document.getElementById('star'+i);
+    if(i<=stars) setTimeout(()=>el.classList.add('lit'),i*200);
+  });
+
+  document.getElementById('final-score').textContent = S.score;
+  document.getElementById('st-correct').textContent = S.correctCount;
+  document.getElementById('st-maxcombo').textContent = '×' + S.maxCombo;
+  const avgTime = S.stageTimes.length > 0 ? (S.stageTimes.reduce((a,b)=>a+b)/S.stageTimes.length).toFixed(1) : '0';
+  document.getElementById('st-time').textContent = avgTime + 's';
+
+  const perf = S.lang==='ar'
+    ? (stars===3?'🌟 متقن':'🌱 جيد جداً!')
+    : (stars===3?'🌟 Master':'🌱 Excellent');
+  document.getElementById('perf-text').textContent = perf;
+
+  // Play coin sound and show flowers
+  beep('correct');
+  startFlowerAnimation();
+  showScreen('s-score');
+}
+
+/* ══════════════════════════════════════════
+   FLOWER ANIMATION
+══════════════════════════════════════════ */
+function startFlowerAnimation() {
+  const canvas = document.getElementById('flowerCanvas');
+  canvas.classList.add('show');
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  const ctx = canvas.getContext('2d');
+
+  const flowers = [];
+  const flowerCount = 20;
+
+  for (let i = 0; i < flowerCount; i++) {
+    flowers.push({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height - canvas.height,
+      vx: (Math.random() - 0.5) * 2,
+      vy: Math.random() * 1.5 + 1,
+      life: 1,
+    });
+  }
+
+  function drawFlower(x, y, size, alpha) {
+    ctx.save();
+    ctx.globalAlpha = alpha;
+    ctx.font = `${size}px Arial`;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText('🌸', x, y);
+    ctx.restore();
+  }
+
+  function animate() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    let allDead = true;
+
+    flowers.forEach(f => {
+      f.x += f.vx;
+      f.y += f.vy;
+      f.life -= 0.008;
+
+      if (f.life > 0) {
+        allDead = false;
+        drawFlower(f.x, f.y, 30, f.life);
+      }
+    });
+
+    if (!allDead) {
+      requestAnimationFrame(animate);
+    } else {
+      canvas.classList.remove('show');
+    }
+  }
+
+  animate();
+}
+
+function goHome() {
+  showScreen('s-home');
+}
+
+function retryStage() {
+  setupStage(S.stage);
+}
+
+// Init on load
+window.onload = ()=>{
+  updateVariety();
+  updateAch();
+};
 </script>
+
 </body>
 </html>

@@ -1,0 +1,17 @@
+{
+  "name": "Zarrai — Plant ID & Disease Diagnosis",
+  "short_name": "Zarrai",
+  "description": "Identify plants and diagnose diseases from photos. Arabic & English. By AbdAllah Alzoubi & Hassn Alzoubi.",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#0a1208",
+  "theme_color": "#16a34a",
+  "orientation": "portrait-primary",
+  "lang": "ar",
+  "dir": "rtl",
+  "icons": [
+    { "src": "icons/icon-192.svg", "sizes": "192x192", "type": "image/svg+xml" },
+    { "src": "icons/icon-512.svg", "sizes": "512x512", "type": "image/svg+xml", "purpose": "maskable" }
+  ],
+  "categories": ["education", "utilities", "lifestyle"]
+}
